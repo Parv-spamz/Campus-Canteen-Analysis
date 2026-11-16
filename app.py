@@ -276,14 +276,17 @@ st.markdown(
     /* =========================================================
        APPLE LIQUID GLASS SEGMENTED NAVIGATION CONTROL (TABS)
        ========================================================= */
-    /* Remove default BaseWeb underline and border lines completely */
+    /* Neutralize default lines, dividers, and BaseWeb legacy borders */
+    div[data-testid="stTabs"] [role="tablist"]::after,
     div[data-testid="stTabs"] [data-baseweb="tab-border"],
     div[data-testid="stTabs"] [data-baseweb="tab-highlight"],
     .stTabs [data-baseweb="tab-border"],
     .stTabs [data-baseweb="tab-highlight"],
     [data-baseweb="tab-border"],
-    [data-baseweb="tab-highlight"] {
+    [data-baseweb="tab-highlight"],
+    div[data-testid="stTabs"] div::after {
         display: none !important;
+        content: none !important;
         height: 0px !important;
         width: 0px !important;
         opacity: 0 !important;
@@ -299,90 +302,139 @@ st.markdown(
     }
 
     /* Elevated Floating Glass Capsule Track */
+    div[data-testid="stTabs"] [role="tablist"],
+    div[data-testid="stTabs"] div[aria-label="Tabs"],
+    .stTabs [role="tablist"],
     div[data-testid="stTabs"] [data-baseweb="tab-list"],
-    .stTabs [data-baseweb="tab-list"],
-    div[data-testid="stTabs"] [role="tablist"] {
-        display: inline-flex !important;
-        width: auto !important;
-        max-width: fit-content !important;
-        background: rgba(255, 255, 255, 0.70) !important;
+    .stTabs [data-baseweb="tab-list"] {
+        display: flex !important;
+        width: 100% !important;
+        max-width: 900px !important;
+        background: rgba(255, 255, 255, 0.72) !important;
         backdrop-filter: blur(28px) saturate(200%) !important;
         -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.88) !important;
+        border: 1px solid rgba(255, 255, 255, 0.90) !important;
         border-top: 1.5px solid #FFFFFF !important;
         border-radius: 9999px !important;
         padding: 5px 6px !important;
         gap: 6px !important;
         box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), inset 0 1px 1px #FFFFFF !important;
-        margin-bottom: 2rem !important;
+        margin-bottom: 2.25rem !important;
+        position: relative !important;
         align-items: center !important;
+        justify-content: space-between !important;
+        overflow: hidden !important;
     }
 
-    /* Individual Tab Items */
-    div[data-testid="stTabs"] button[data-baseweb="tab"],
-    .stTabs button[data-baseweb="tab"],
+    /* Designated Equal Spot for Each Tab (25% each) */
+    div[data-testid="stTabs"] [data-testid="stTab"],
+    .stTabs [data-testid="stTab"],
     div[data-testid="stTabs"] button[role="tab"],
-    .stTabs button[role="tab"] {
+    .stTabs button[role="tab"],
+    div[data-testid="stTabs"] button[data-baseweb="tab"],
+    .stTabs button[data-baseweb="tab"] {
+        flex: 1 1 0 !important;
+        width: 25% !important;
+        min-width: 0 !important;
         height: 38px !important;
         border-radius: 9999px !important;
         background: transparent !important;
-        border: 1px solid transparent !important;
-        padding: 0 20px !important;
+        border: none !important;
+        padding: 0 12px !important;
         margin: 0 !important;
-        color: #475569 !important;
-        font-size: 0.88rem !important;
-        font-weight: 600 !important;
-        letter-spacing: -0.01em !important;
-        transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
         cursor: pointer !important;
         outline: none !important;
         box-shadow: none !important;
-        white-space: nowrap !important;
+        position: relative !important;
+        transition: color 0.22s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease !important;
     }
 
-    div[data-testid="stTabs"] button[data-baseweb="tab"]:hover,
-    .stTabs button[data-baseweb="tab"]:hover,
-    div[data-testid="stTabs"] button[role="tab"]:hover,
-    .stTabs button[role="tab"]:hover {
-        color: #0F172A !important;
-        background: rgba(255, 255, 255, 0.50) !important;
-        border-color: rgba(255, 255, 255, 0.8) !important;
+    /* Suppress Blue Focus Outline / Rectangles Completely */
+    div[data-testid="stTabs"] [data-testid="stTab"]:focus,
+    div[data-testid="stTabs"] [data-testid="stTab"]:focus-visible,
+    div[data-testid="stTabs"] [data-testid="stTab"][data-focus-visible],
+    div[data-testid="stTabs"] button[role="tab"]:focus,
+    div[data-testid="stTabs"] button[role="tab"]:focus-visible,
+    div[data-testid="stTabs"] button[data-baseweb="tab"]:focus {
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
     }
 
-    div[data-testid="stTabs"] button[data-baseweb="tab"]:active,
-    .stTabs button[data-baseweb="tab"]:active {
-        transform: scale(0.98);
+    /* The Sliding Bubble (React Aria Animated Indicator) */
+    div[data-testid="stTabs"] .react-aria-SelectionIndicator {
+        position: absolute !important;
+        top: 0px !important;
+        left: 0px !important;
+        right: 0px !important;
+        bottom: 0px !important;
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 9999px !important;
+        background: transparent !important;
+        pointer-events: none !important;
+        z-index: 1 !important;
+        transition: translate 0.28s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease !important;
     }
 
-    /* Active Segmented Pill (Apple White Glaze + Blue Text) */
-    div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"],
-    .stTabs button[data-baseweb="tab"][aria-selected="true"],
-    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
-    .stTabs button[role="tab"][aria-selected="true"] {
+    /* Sliding Bubble Active Glow & Surface */
+    div[data-testid="stTabs"] [data-testid="stTab"][data-selected] .react-aria-SelectionIndicator,
+    div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] .react-aria-SelectionIndicator {
         background: #FFFFFF !important;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04), inset 0 1px 1px #FFFFFF !important;
+        border: 1px solid rgba(255, 255, 255, 1.0) !important;
+    }
+
+    /* Active Tab Container Styling */
+    div[data-testid="stTabs"] [data-testid="stTab"][data-selected],
+    div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"],
+    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
+        border-radius: 9999px !important;
         color: #0071E3 !important;
         font-weight: 700 !important;
-        border-radius: 9999px !important;
-        border: 1px solid rgba(255, 255, 255, 1.0) !important;
-        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04), inset 0 1px 1px #FFFFFF !important;
-        border-bottom: none !important;
     }
 
-    div[data-testid="stTabs"] button[data-baseweb="tab"] p,
-    .stTabs button[data-baseweb="tab"] p,
-    div[data-testid="stTabs"] button[role="tab"] p,
-    .stTabs button[role="tab"] p {
-        font-size: 0.88rem !important;
-        font-weight: inherit !important;
-        color: inherit !important;
+    /* Tab Text Layering (Sits on top of the sliding bubble) */
+    div[data-testid="stTabs"] [data-testid="stTab"] div[data-testid="stMarkdownContainer"],
+    div[data-testid="stTabs"] [data-testid="stTab"] p,
+    div[data-testid="stTabs"] button[role="tab"] p {
+        position: relative !important;
+        z-index: 2 !important;
         margin: 0 !important;
-        line-height: 1.2 !important;
+        font-size: 0.88rem !important;
+        letter-spacing: -0.01em !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        transition: color 0.2s ease, font-weight 0.2s ease !important;
     }
 
-    div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] p,
-    .stTabs button[data-baseweb="tab"][aria-selected="true"] p,
-    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p,
-    .stTabs button[role="tab"][aria-selected="true"] p {
+    /* Inactive Tab Text */
+    div[data-testid="stTabs"] [data-testid="stTab"]:not([data-selected]):not([aria-selected="true"]) p,
+    div[data-testid="stTabs"] button[role="tab"]:not([aria-selected="true"]) p {
+        color: #475569 !important;
+        font-weight: 600 !important;
+    }
+
+    /* Inactive Tab Hover Feel */
+    div[data-testid="stTabs"] [data-testid="stTab"]:hover:not([data-selected]):not([aria-selected="true"]),
+    div[data-testid="stTabs"] button[role="tab"]:hover:not([aria-selected="true"]) {
+        background: rgba(255, 255, 255, 0.40) !important;
+    }
+    div[data-testid="stTabs"] [data-testid="stTab"]:hover:not([data-selected]):not([aria-selected="true"]) p,
+    div[data-testid="stTabs"] button[role="tab"]:hover:not([aria-selected="true"]) p {
+        color: #0F172A !important;
+    }
+
+    /* Active Selected Text */
+    div[data-testid="stTabs"] [data-testid="stTab"][data-selected] p,
+    div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] p,
+    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p {
         color: #0071E3 !important;
         font-weight: 700 !important;
     }
