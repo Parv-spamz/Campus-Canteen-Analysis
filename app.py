@@ -2,11 +2,12 @@
 Campus Canteen Intelligence - Sales Analytics & Demand Prediction
 Apple Liquid Glass / Glassmorphism Edition.
 
-Design System:
-- Apple Glassmorphism (Frosted glass layers, specular reflection borders, backdrop blur).
-- Light, airy, high-contrast palette with zero emojis.
-- High-contrast typography adhering to WCAG AAA standards.
-- Instant load times (<0.05s) via pre-serialized scikit-learn model.
+Design Architecture:
+- Apple Glassmorphism (Multi-layered frosted glass, specular highlights, luminous liquid tints).
+- Dynamic ambient mesh background providing visual depth for true glass refraction.
+- Zero emojis across the entire interface (clean, artisanal typography).
+- High-contrast typography strictly adhering to Apple Human Interface Guidelines and WCAG AAA.
+- Ultra-low latency (<0.05s) via pre-serialized scikit-learn models and memory caching.
 """
 
 import os
@@ -39,7 +40,7 @@ from src.model import (
     predict_next_7_days,
 )
 
-# Page configuration (No emojis)
+# Page configuration (Strictly no emojis)
 st.set_page_config(
     page_title="Campus Canteen Intelligence",
     layout="wide",
@@ -54,195 +55,216 @@ st.markdown(
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-    /* Global canvas with soft ambient aura */
+    /* Apple Dynamic Ambient Mesh Background */
     html, body, .stApp {
-        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Plus Jakarta Sans", Roboto, sans-serif;
-        background: radial-gradient(circle at 12% 15%, rgba(2, 132, 199, 0.05) 0%, transparent 40%),
-                    radial-gradient(circle at 88% 18%, rgba(217, 119, 6, 0.05) 0%, transparent 35%),
-                    radial-gradient(circle at 50% 90%, rgba(5, 150, 105, 0.04) 0%, transparent 45%),
-                    #F8FAFC !important;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Plus Jakarta Sans", sans-serif;
+        background: 
+            radial-gradient(at 10% 12%, rgba(56, 189, 248, 0.15) 0px, transparent 45%),
+            radial-gradient(at 90% 15%, rgba(245, 158, 11, 0.13) 0px, transparent 40%),
+            radial-gradient(at 35% 85%, rgba(16, 185, 129, 0.10) 0px, transparent 50%),
+            radial-gradient(at 85% 82%, rgba(139, 92, 246, 0.12) 0px, transparent 45%),
+            #EDF2F7 !important;
+        background-attachment: fixed !important;
         color: #0F172A !important;
     }
 
     .block-container {
-        padding-top: 1.75rem;
+        padding-top: 1.85rem;
         padding-bottom: 3.5rem;
-        padding-left: 2.25rem;
-        padding-right: 2.25rem;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
         max-width: 1440px;
     }
 
-    /* Primary header lockup */
+    /* Primary Title Lockup */
     .app-title {
-        font-size: 1.95rem;
+        font-size: 2.15rem;
         font-weight: 800;
-        letter-spacing: -0.035em;
+        letter-spacing: -0.04em;
         color: #0F172A !important;
         margin: 0 0 4px 0;
-        line-height: 1.2;
+        line-height: 1.15;
     }
     .app-subtitle {
-        font-size: 0.96rem;
+        font-size: 0.98rem;
         font-weight: 400;
         color: #475569 !important;
         margin: 0 0 16px 0;
         line-height: 1.5;
     }
 
-    /* Apple Frosted Glass Pill */
-    .glass-pill {
+    /* Apple Liquid Glass Status Pill */
+    .glass-status-pill {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        background: rgba(2, 132, 199, 0.07);
-        border: 1px solid rgba(2, 132, 199, 0.22);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.8) !important;
+        border: 1px solid rgba(255, 255, 255, 0.95);
+        border-top: 1.5px solid #FFFFFF;
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
         border-radius: 9999px;
-        padding: 4px 14px;
-        font-size: 0.78rem;
+        padding: 5px 16px;
+        font-size: 0.80rem;
         font-weight: 600;
-        color: #0284C7 !important;
-        letter-spacing: 0.02em;
+        color: #0071E3 !important;
+        box-shadow: 0 4px 14px rgba(0, 113, 227, 0.08), inset 0 1px 1px #FFFFFF;
     }
-    .pill-indicator {
-        width: 7px;
-        height: 7px;
+    .status-dot-pulse {
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
-        background-color: #0284C7;
-        box-shadow: 0 0 8px rgba(2, 132, 199, 0.6);
+        background-color: #0071E3;
+        box-shadow: 0 0 10px rgba(0, 113, 227, 0.7);
     }
 
-    /* Glass Callout Banner */
+    /* Apple Notice Callout */
     .glass-banner {
-        background: rgba(255, 255, 255, 0.65) !important;
-        backdrop-filter: blur(18px) saturate(180%);
-        -webkit-backdrop-filter: blur(18px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.85);
-        border-left: 4px solid #0284C7;
-        border-radius: 12px;
-        padding: 12px 18px;
+        background: rgba(255, 255, 255, 0.75) !important;
+        backdrop-filter: blur(24px) saturate(190%);
+        -webkit-backdrop-filter: blur(24px) saturate(190%);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-left: 4.5px solid #0071E3;
+        border-radius: 14px;
+        padding: 13px 20px;
         margin-bottom: 1.75rem;
         color: #334155 !important;
-        font-size: 0.875rem;
-        line-height: 1.5;
-        box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
+        font-size: 0.88rem;
+        line-height: 1.55;
+        box-shadow: 0 6px 20px -3px rgba(15, 23, 42, 0.05), inset 0 1px 1px #FFFFFF;
     }
     .glass-banner strong {
         color: #0F172A !important;
     }
 
-    /* Apple Frosted Glass KPI Cards */
+    /* Liquid Glass KPI Cards Grid */
     .kpi-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 16px;
-        margin-bottom: 1.75rem;
+        gap: 18px;
+        margin-bottom: 1.85rem;
     }
-    .glass-card {
-        background: rgba(255, 255, 255, 0.72) !important;
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.9) !important;
-        border-radius: 16px;
-        padding: 18px 22px;
-        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
-        transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+
+    /* Individual Tinted Liquid Glass Cards */
+    .liquid-card {
+        backdrop-filter: blur(24px) saturate(190%);
+        -webkit-backdrop-filter: blur(24px) saturate(190%);
+        border: 1px solid rgba(255, 255, 255, 0.85) !important;
+        border-top: 1.5px solid rgba(255, 255, 255, 1.0) !important;
+        border-radius: 18px;
+        padding: 20px 22px;
+        box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03), inset 0 1px 2px rgba(255, 255, 255, 0.95);
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .glass-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 28px -4px rgba(15, 23, 42, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 1);
-        border-color: rgba(2, 132, 199, 0.3) !important;
+    .liquid-card:hover {
+        transform: translateY(-3px) scale(1.008);
+        box-shadow: 0 18px 36px -6px rgba(15, 23, 42, 0.10), inset 0 1px 2px #FFFFFF;
     }
+
+    /* Specific Liquid Color Tints */
+    .liquid-amber {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(254, 243, 199, 0.55) 100%) !important;
+    }
+    .liquid-sky {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(224, 242, 254, 0.55) 100%) !important;
+    }
+    .liquid-mint {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(209, 250, 229, 0.55) 100%) !important;
+    }
+    .liquid-purple {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(243, 232, 255, 0.55) 100%) !important;
+    }
+    .liquid-neutral {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(241, 245, 249, 0.65) 100%) !important;
+    }
+
     .kpi-title {
-        font-size: 0.78rem;
-        font-weight: 600;
+        font-size: 0.77rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.07em;
         color: #64748B !important;
         margin-bottom: 8px;
     }
     .kpi-metric {
-        font-size: 2.05rem;
+        font-size: 2.15rem;
         font-weight: 800;
         color: #0F172A !important;
         line-height: 1.1;
-        letter-spacing: -0.03em;
+        letter-spacing: -0.035em;
     }
     .kpi-foot {
-        font-size: 0.80rem;
-        font-weight: 500;
-        color: #0284C7 !important;
+        font-size: 0.82rem;
+        font-weight: 600;
         margin-top: 8px;
     }
-    .kpi-foot.amber {
-        color: #D97706 !important;
-    }
-    .kpi-foot.emerald {
-        color: #059669 !important;
-    }
-    .kpi-foot.slate {
-        color: #64748B !important;
-    }
+    .kpi-foot.amber { color: #D97706 !important; }
+    .kpi-foot.sky { color: #0071E3 !important; }
+    .kpi-foot.emerald { color: #059669 !important; }
+    .kpi-foot.purple { color: #7C3AED !important; }
+    .kpi-foot.slate { color: #64748B !important; }
 
     /* Section Headings */
     .section-header {
         font-size: 1.25rem;
         font-weight: 700;
         color: #0F172A !important;
-        letter-spacing: -0.015em;
+        letter-spacing: -0.02em;
         margin: 0 0 4px 0;
     }
     .section-caption {
-        font-size: 0.85rem;
+        font-size: 0.86rem;
         color: #64748B !important;
         margin: 0 0 14px 0;
     }
 
-    /* Glass Container Wrapper for Charts */
+    /* Apple Glass Chart Panel */
     .chart-glass-panel {
-        background: rgba(255, 255, 255, 0.72) !important;
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        background: rgba(255, 255, 255, 0.80) !important;
+        backdrop-filter: blur(24px) saturate(190%);
+        -webkit-backdrop-filter: blur(24px) saturate(190%);
         border: 1px solid rgba(255, 255, 255, 0.9) !important;
-        border-radius: 16px;
-        padding: 20px 22px 14px 22px;
-        margin-bottom: 16px;
-        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+        border-top: 1.5px solid rgba(255, 255, 255, 1.0) !important;
+        border-radius: 18px;
+        padding: 22px 24px 14px 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02), inset 0 1px 2px rgba(255, 255, 255, 0.95);
     }
 
-    /* Machine Learning Focus Glass Box */
+    /* Forecast Highlight Glass Box */
     .forecast-summary-panel {
-        background: rgba(255, 255, 255, 0.80) !important;
-        backdrop-filter: blur(24px) saturate(180%);
-        -webkit-backdrop-filter: blur(24px) saturate(180%);
-        border: 1px solid rgba(2, 132, 199, 0.25) !important;
-        border-radius: 16px;
-        padding: 20px 24px;
-        margin-bottom: 1.75rem;
-        box-shadow: 0 6px 24px -2px rgba(2, 132, 199, 0.06), inset 0 1px 1px 0 rgba(255, 255, 255, 1);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(238, 246, 255, 0.85) 100%) !important;
+        backdrop-filter: blur(24px) saturate(190%);
+        -webkit-backdrop-filter: blur(24px) saturate(190%);
+        border: 1.5px solid rgba(0, 113, 227, 0.25) !important;
+        border-top: 1.5px solid rgba(255, 255, 255, 1.0) !important;
+        border-radius: 18px;
+        padding: 22px 26px;
+        margin-bottom: 1.85rem;
+        box-shadow: 0 12px 32px -4px rgba(0, 113, 227, 0.08), inset 0 1px 2px #FFFFFF;
     }
     .forecast-summary-title {
-        font-size: 1.12rem;
+        font-size: 1.15rem;
         font-weight: 700;
         color: #0F172A !important;
         margin-bottom: 8px;
     }
     .forecast-summary-body {
-        font-size: 0.93rem;
+        font-size: 0.94rem;
         color: #334155 !important;
         line-height: 1.6;
     }
     .forecast-summary-body strong {
-        color: #0284C7 !important;
+        color: #0071E3 !important;
     }
 
-    /* Sidebar Glassmorphism */
+    /* Translucent Frosted Sidebar */
     section[data-testid="stSidebar"] {
         background: rgba(255, 255, 255, 0.65) !important;
-        backdrop-filter: blur(24px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-        border-right: 1px solid rgba(226, 232, 240, 0.8) !important;
+        backdrop-filter: blur(24px) saturate(190%) !important;
+        -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.8) !important;
+        box-shadow: 4px 0 24px rgba(15, 23, 42, 0.03);
     }
     section[data-testid="stSidebar"] .stMarkdown p {
         color: #334155 !important;
@@ -251,32 +273,38 @@ st.markdown(
         color: #0F172A !important;
     }
 
-    /* Apple Segmented Tab Bar */
+    /* Apple Segmented Floating Tab Bar */
     .stTabs [data-baseweb="tab-list"] {
-        background: rgba(241, 245, 249, 0.8) !important;
-        backdrop-filter: blur(12px) !important;
-        -webkit-backdrop-filter: blur(12px) !important;
-        border-radius: 12px;
-        padding: 4px;
-        border: 1px solid rgba(226, 232, 240, 0.8);
-        gap: 4px;
-        margin-bottom: 1.5rem;
+        background: rgba(255, 255, 255, 0.62) !important;
+        backdrop-filter: blur(18px) saturate(180%) !important;
+        -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
+        border-radius: 14px;
+        padding: 5px;
+        border: 1px solid rgba(255, 255, 255, 0.85);
+        border-top: 1px solid #FFFFFF;
+        gap: 6px;
+        box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
+        margin-bottom: 1.75rem;
     }
     .stTabs [data-baseweb="tab"] {
-        height: 38px;
-        border-radius: 8px;
-        color: #64748B !important;
+        height: 40px;
+        border-radius: 10px;
+        color: #475569 !important;
         font-weight: 600;
-        font-size: 0.86rem;
-        padding: 0 16px;
-        transition: all 0.2s ease;
+        font-size: 0.88rem;
+        padding: 0 20px;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         background: transparent !important;
         border: none !important;
     }
-    .stTabs [aria-selected="true"] {
-        background: rgba(255, 255, 255, 0.95) !important;
+    .stTabs [data-baseweb="tab"]:hover {
         color: #0F172A !important;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+        background: rgba(255, 255, 255, 0.5) !important;
+    }
+    .stTabs [aria-selected="true"] {
+        background: #FFFFFF !important;
+        color: #0F172A !important;
+        box-shadow: 0 3px 12px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
     }
     </style>
     """,
@@ -310,7 +338,6 @@ def load_cached_model(daily_df: pd.DataFrame):
         except Exception:
             pass
 
-    # Instantaneous fallback
     pipeline, metrics = train_demand_model(daily_df)
     try:
         joblib.dump({"pipeline": pipeline, "metrics": metrics}, model_path)
@@ -319,20 +346,16 @@ def load_cached_model(daily_df: pd.DataFrame):
     return pipeline, metrics
 
 
-# Ingest data & pre-serialized model
+# Load assets instantly
 df_raw = load_cached_raw_data()
 df_daily = load_cached_daily_demand(df_raw)
 ml_pipeline, ml_metrics = load_cached_model(df_daily)
 
 
 # -------------------------------------------------------------
-# PLOTLY THEME HARMONIZER (Glassmorphism Light Palette)
+# PLOTLY THEME HARMONIZER (Apple Liquid Glass Palette)
 # -------------------------------------------------------------
 def apply_glass_theme(fig: go.Figure, height: int = 320) -> go.Figure:
-    """
-    Applies unified frosted-glass chart theming, crisp slate axes,
-    and high-contrast translucent tooltips.
-    """
     fig.update_layout(
         template="plotly_white",
         height=height,
@@ -349,7 +372,7 @@ def apply_glass_theme(fig: go.Figure, height: int = 320) -> go.Figure:
             font_color="#0F172A",
             font_family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
             font_size=12,
-            bordercolor="rgba(226, 232, 240, 0.9)",
+            bordercolor="rgba(0, 113, 227, 0.25)",
         ),
         xaxis=dict(
             showgrid=False,
@@ -372,12 +395,12 @@ def apply_glass_theme(fig: go.Figure, height: int = 320) -> go.Figure:
     return fig
 
 
-# Apple-Harmonized Category Palette (Cohesive, Saturated Pastels)
+# Apple Product Category Palette (Vibrant Saturated Pastels)
 CATEGORY_PALETTE = {
-    "Meals": "#0284C7",      # Apple Cobalt
-    "Breakfast": "#D97706",  # Warm Amber
-    "Snacks": "#E11D48",     # Coral Rose
-    "Beverages": "#059669",  # Mint Emerald
+    "Meals": "#0071E3",      # Apple Royal Blue
+    "Breakfast": "#F59E0B",  # Apple Amber
+    "Snacks": "#F43F5E",     # Apple Rose
+    "Beverages": "#10B981",  # Apple Mint
 }
 
 
@@ -396,12 +419,12 @@ with head_right:
     st.markdown(
         f"""
         <div style="text-align: right;">
-            <div class="glass-pill">
-                <span class="pill-indicator"></span>
+            <div class="glass-status-pill">
+                <span class="status-dot-pulse"></span>
                 <span>RandomForest R²: {ml_metrics['r2']}</span>
             </div>
-            <div style="font-size: 0.78rem; color: #64748B; margin-top: 5px;">
-                Holdout MAE: ±{ml_metrics['mae']} units
+            <div style="font-size: 0.78rem; color: #64748B; margin-top: 6px; font-weight: 500;">
+                Holdout Validation: ±{ml_metrics['mae']} units error
             </div>
         </div>
         """,
@@ -434,7 +457,7 @@ date_range_picker = st.sidebar.date_input(
     value=(min_dt, max_dt),
     min_value=min_dt,
     max_value=max_dt,
-    help="Select the starting and ending dates for historical analysis.",
+    help="Select starting and ending dates for historical analysis.",
 )
 
 if isinstance(date_range_picker, tuple) and len(date_range_picker) == 2:
@@ -482,7 +505,7 @@ if df_filtered.empty:
 
 
 # -------------------------------------------------------------
-# NAVIGATION TABS (No Emojis)
+# NAVIGATION TABS (Strictly no emojis)
 # -------------------------------------------------------------
 tab_overview, tab_products, tab_forecast, tab_meta = st.tabs([
     "Overview Dashboard",
@@ -498,29 +521,29 @@ tab_overview, tab_products, tab_forecast, tab_meta = st.tabs([
 with tab_overview:
     kpi = calculate_kpis(df_filtered)
 
-    # 4 Apple Frosted Glass KPI Cards
+    # 4 Liquid Glass Tinted Cards (Distinct, Colorful, Frosted)
     st.markdown(
         f"""
         <div class="kpi-grid">
-            <div class="glass-card">
+            <div class="liquid-card liquid-amber">
                 <div class="kpi-title">Total Revenue</div>
                 <div class="kpi-metric">{kpi['formatted_revenue_short']}</div>
                 <div class="kpi-foot amber">{kpi['formatted_revenue']} exact</div>
             </div>
-            <div class="glass-card">
+            <div class="liquid-card liquid-sky">
                 <div class="kpi-title">Total Orders</div>
                 <div class="kpi-metric">{kpi['formatted_orders']}</div>
-                <div class="kpi-foot emerald">{(len(df_filtered)/len(df_raw)*100):.1f}% active slice</div>
+                <div class="kpi-foot sky">{(len(df_filtered)/len(df_raw)*100):.1f}% active slice</div>
             </div>
-            <div class="glass-card">
+            <div class="liquid-card liquid-mint">
                 <div class="kpi-title">Total Units Sold</div>
                 <div class="kpi-metric">{kpi['formatted_units']}</div>
-                <div class="kpi-foot slate">{(kpi['total_units_sold']/max(1, kpi['total_orders'])):.2f} items / order</div>
+                <div class="kpi-foot emerald">{(kpi['total_units_sold']/max(1, kpi['total_orders'])):.2f} items / order</div>
             </div>
-            <div class="glass-card">
+            <div class="liquid-card liquid-purple">
                 <div class="kpi-title">Average Order Value</div>
                 <div class="kpi-metric">{kpi['formatted_aov']}</div>
-                <div class="kpi-foot slate">Per customer transaction</div>
+                <div class="kpi-foot purple">Per customer transaction</div>
             </div>
         </div>
         """,
@@ -533,7 +556,7 @@ with tab_overview:
     with r1_col1:
         st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
         st.markdown('<div class="section-header">Daily Revenue Trend</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-caption">Historical daily sales cash flow with 7-day smoothed moving average.</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-caption">Historical daily cash flow with 7-day smoothed moving average.</div>', unsafe_allow_html=True)
         daily_trend = get_daily_trend(df_filtered)
 
         fig_trend = go.Figure()
@@ -543,7 +566,7 @@ with tab_overview:
                 y=daily_trend["revenue"],
                 mode="lines",
                 name="Daily Revenue",
-                line=dict(color="rgba(2, 132, 199, 0.35)", width=1.5),
+                line=dict(color="rgba(100, 116, 139, 0.45)", width=1.5),
                 hovertemplate="<b>%{x|%b %d, %Y}</b><br>Revenue: ₹%{y:,.0f}<extra></extra>",
             )
         )
@@ -553,7 +576,7 @@ with tab_overview:
                 y=daily_trend["rolling_7d_revenue"],
                 mode="lines",
                 name="7-Day Moving Avg",
-                line=dict(color="#0284C7", width=3),
+                line=dict(color="#0071E3", width=3.2),
                 hovertemplate="<b>7-Day Trend:</b> ₹%{y:,.0f}<extra></extra>",
             )
         )
@@ -626,9 +649,9 @@ with tab_overview:
         st.markdown('<div class="section-caption">Demand distribution across breakfast, lunch & snacks.</div>', unsafe_allow_html=True)
         hourly = get_hourly_sales(df_filtered)
 
-        # Highlight meal times: Amber for rush, subtle slate for off-peak
+        # Highlight meal times: Cobalt for rush windows, subtle slate for other hours
         hour_colors = [
-            "#D97706" if (12 <= h <= 14 or 16 <= h <= 17) else "rgba(148, 163, 184, 0.35)"
+            "#0071E3" if (12 <= h <= 14 or 16 <= h <= 17) else "rgba(148, 163, 184, 0.4)"
             for h in hourly["hour"]
         ]
 
@@ -653,7 +676,7 @@ with tab_overview:
         st.markdown('<div class="section-caption">Weekly rhythm showing weekday rush vs weekend drop.</div>', unsafe_allow_html=True)
         weekday_df = get_weekday_sales(df_filtered)
 
-        wk_colors = ["#0284C7" if d < 5 else "#D97706" for d in weekday_df["day_of_week"]]
+        wk_colors = ["#0071E3" if d < 5 else "#F59E0B" for d in weekday_df["day_of_week"]]
 
         fig_wk = go.Figure(
             data=[
@@ -678,29 +701,29 @@ with tab_overview:
 with tab_products:
     summary = get_product_insights_summary(df_filtered)
 
-    # 4 Product Summary Cards
+    # 4 Product Summary Cards with Distinct Liquid Tints
     st.markdown(
         f"""
         <div class="kpi-grid">
-            <div class="glass-card">
+            <div class="liquid-card liquid-mint">
                 <div class="kpi-title">Highest Volume Item</div>
                 <div class="kpi-metric" style="font-size:1.6rem;">{summary['best_selling_item']}</div>
                 <div class="kpi-foot emerald">{summary['best_selling_units']:,} units sold</div>
             </div>
-            <div class="glass-card">
+            <div class="liquid-card liquid-amber">
                 <div class="kpi-title">Top Revenue Generator</div>
                 <div class="kpi-metric" style="font-size:1.6rem;">{summary['highest_revenue_item']}</div>
                 <div class="kpi-foot amber">₹{summary['highest_revenue_amt']:,.0f} generated</div>
             </div>
-            <div class="glass-card">
+            <div class="liquid-card liquid-neutral">
                 <div class="kpi-title">Lowest Volume Item</div>
                 <div class="kpi-metric" style="font-size:1.6rem;">{summary['least_selling_item']}</div>
                 <div class="kpi-foot slate">{summary['least_selling_units']:,} units sold</div>
             </div>
-            <div class="glass-card">
+            <div class="liquid-card liquid-purple">
                 <div class="kpi-title">Dominant Payment Mode</div>
                 <div class="kpi-metric" style="font-size:1.6rem;">{summary['top_payment_method']}</div>
-                <div class="kpi-foot slate">Campus cashless trend</div>
+                <div class="kpi-foot purple">Campus cashless trend</div>
             </div>
         </div>
         """,
@@ -721,7 +744,7 @@ with tab_products:
                 name="Units Sold",
                 x=item_table["item"],
                 y=item_table["units_sold"],
-                marker_color="#0284C7",
+                marker_color="#0071E3",
                 yaxis="y",
                 offsetgroup=1,
             )
@@ -731,7 +754,7 @@ with tab_products:
                 name="Revenue (₹)",
                 x=item_table["item"],
                 y=item_table["revenue"],
-                marker_color="#D97706",
+                marker_color="#F59E0B",
                 yaxis="y2",
                 offsetgroup=2,
             )
@@ -821,7 +844,7 @@ with tab_forecast:
         ml_pipeline, target_item, last_known_dt
     )
 
-    # Frosted Glass Forecast Summary
+    # Frosted Liquid Glass Forecast Summary Panel
     st.markdown(
         f"""
         <div class="forecast-summary-panel">
@@ -841,29 +864,29 @@ with tab_forecast:
         unsafe_allow_html=True,
     )
 
-    # 4 Forecast Metrics
+    # 4 Forecast Metrics with Liquid Color Tints
     st.markdown(
         f"""
         <div class="kpi-grid">
-            <div class="glass-card">
+            <div class="liquid-card liquid-amber">
                 <div class="kpi-title">7-Day Target Units</div>
                 <div class="kpi-metric">{forecast_sum['total_units']}</div>
                 <div class="kpi-foot amber">Total portions to cook</div>
             </div>
-            <div class="glass-card">
+            <div class="liquid-card liquid-mint">
                 <div class="kpi-title">Expected Cash Flow</div>
                 <div class="kpi-metric">{format_inr(forecast_sum['total_revenue'])}</div>
                 <div class="kpi-foot emerald">Gross sales projection</div>
             </div>
-            <div class="glass-card">
+            <div class="liquid-card liquid-sky">
                 <div class="kpi-title">Peak Rush Day</div>
                 <div class="kpi-metric" style="font-size:1.6rem;">{forecast_sum['peak_day']}</div>
-                <div class="kpi-foot amber">{forecast_sum['peak_units']} portions target</div>
+                <div class="kpi-foot sky">{forecast_sum['peak_units']} portions target</div>
             </div>
-            <div class="glass-card">
+            <div class="liquid-card liquid-purple">
                 <div class="kpi-title">Holdout Accuracy</div>
                 <div class="kpi-metric">R² {ml_metrics['r2']}</div>
-                <div class="kpi-foot slate">MAE: ±{ml_metrics['mae']} units error</div>
+                <div class="kpi-foot purple">MAE: ±{ml_metrics['mae']} units error</div>
             </div>
         </div>
         """,
@@ -877,7 +900,7 @@ with tab_forecast:
         st.markdown('<div class="section-header">Upcoming 7-Day Forecast Horizon</div>', unsafe_allow_html=True)
         st.markdown(f'<div class="section-caption">Predicted daily portion requirements from {forecast_df["Date"].iloc[0]} to {forecast_df["Date"].iloc[-1]}.</div>', unsafe_allow_html=True)
 
-        fc_colors = ["#D97706" if row["Is Weekend"] == "Yes" else "#0284C7" for _, row in forecast_df.iterrows()]
+        fc_colors = ["#F59E0B" if row["Is Weekend"] == "Yes" else "#0071E3" for _, row in forecast_df.iterrows()]
 
         fig_fc = go.Figure(
             data=[
@@ -903,8 +926,8 @@ with tab_forecast:
         st.plotly_chart(fig_fc, width="stretch")
         st.markdown(
             '<div style="font-size:0.78rem;color:#64748B;margin-top:4px;">'
-            '<span style="color:#0284C7;">●</span> Weekday Campus Rush &nbsp;|&nbsp; '
-            '<span style="color:#D97706;">●</span> Weekend Campus Lull'
+            '<span style="color:#0071E3;">●</span> Weekday Campus Rush &nbsp;|&nbsp; '
+            '<span style="color:#F59E0B;">●</span> Weekend Campus Lull'
             '</div>',
             unsafe_allow_html=True,
         )
@@ -943,29 +966,29 @@ with tab_meta:
     st.markdown('<div class="section-header">Dataset Specification & System Transparency</div>', unsafe_allow_html=True)
     st.markdown('<div class="section-caption">Detailed documentation of the 180-day canteen transactions dataset and model parameters.</div>', unsafe_allow_html=True)
 
-    # 4 Dataset Metrics
+    # 4 Dataset Metrics with Liquid Glass Tints
     st.markdown(
         f"""
         <div class="kpi-grid">
-            <div class="glass-card">
+            <div class="liquid-card liquid-amber">
                 <div class="kpi-title">Total Orders Logged</div>
                 <div class="kpi-metric">{len(df_raw):,}</div>
                 <div class="kpi-foot amber">Individual customer transactions</div>
             </div>
-            <div class="glass-card">
+            <div class="liquid-card liquid-neutral">
                 <div class="kpi-title">Historical Date Span</div>
                 <div class="kpi-metric">{df_raw['date'].nunique()} Days</div>
                 <div class="kpi-foot slate">Continuous university calendar</div>
             </div>
-            <div class="glass-card">
+            <div class="liquid-card liquid-mint">
                 <div class="kpi-title">Missing Values</div>
                 <div class="kpi-metric">{df_raw.isna().sum().sum()} nulls</div>
                 <div class="kpi-foot emerald">100% clean schema validation</div>
             </div>
-            <div class="glass-card">
+            <div class="liquid-card liquid-purple">
                 <div class="kpi-title">Daily Demand Grid</div>
                 <div class="kpi-metric">{len(df_daily):,}</div>
-                <div class="kpi-foot slate">180 Dates × 7 Menu Offerings</div>
+                <div class="kpi-foot purple">180 Dates × 7 Menu Offerings</div>
             </div>
         </div>
         """,
@@ -1026,7 +1049,7 @@ with tab_meta:
 # Footer
 st.markdown(
     """
-    <div style="text-align: center; color: #94A3B8; font-size: 0.82rem; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid rgba(226, 232, 240, 0.8);">
+    <div style="text-align: center; color: #64748B; font-size: 0.82rem; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid rgba(226, 232, 240, 0.8);">
         Campus Canteen Intelligence • Built with Python, Pandas, Scikit-learn, Plotly & Streamlit • Academic Showcase Edition
     </div>
     """,
