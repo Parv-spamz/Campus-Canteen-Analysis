@@ -273,38 +273,230 @@ st.markdown(
         color: #0F172A !important;
     }
 
-    /* Apple Segmented Floating Tab Bar */
-    .stTabs [data-baseweb="tab-list"] {
-        background: rgba(255, 255, 255, 0.62) !important;
-        backdrop-filter: blur(18px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(18px) saturate(180%) !important;
-        border-radius: 14px;
-        padding: 5px;
-        border: 1px solid rgba(255, 255, 255, 0.85);
-        border-top: 1px solid #FFFFFF;
-        gap: 6px;
-        box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
-        margin-bottom: 1.75rem;
-    }
-    .stTabs [data-baseweb="tab"] {
-        height: 40px;
-        border-radius: 10px;
-        color: #475569 !important;
-        font-weight: 600;
-        font-size: 0.88rem;
-        padding: 0 20px;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        background: transparent !important;
+    /* =========================================================
+       APPLE LIQUID GLASS SEGMENTED NAVIGATION CONTROL (TABS)
+       ========================================================= */
+    /* Remove default BaseWeb underline and border lines completely */
+    div[data-testid="stTabs"] [data-baseweb="tab-border"],
+    div[data-testid="stTabs"] [data-baseweb="tab-highlight"],
+    .stTabs [data-baseweb="tab-border"],
+    .stTabs [data-baseweb="tab-highlight"],
+    [data-baseweb="tab-border"],
+    [data-baseweb="tab-highlight"] {
+        display: none !important;
+        height: 0px !important;
+        width: 0px !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
         border: none !important;
     }
-    .stTabs [data-baseweb="tab"]:hover {
-        color: #0F172A !important;
-        background: rgba(255, 255, 255, 0.5) !important;
+    div[data-testid="stTabs"] > div:first-child,
+    .stTabs > div:first-child {
+        border-bottom: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        padding-bottom: 0px !important;
     }
-    .stTabs [aria-selected="true"] {
-        background: #FFFFFF !important;
+
+    /* Elevated Floating Glass Capsule Track */
+    div[data-testid="stTabs"] [data-baseweb="tab-list"],
+    .stTabs [data-baseweb="tab-list"],
+    div[data-testid="stTabs"] [role="tablist"] {
+        display: inline-flex !important;
+        width: auto !important;
+        max-width: fit-content !important;
+        background: rgba(255, 255, 255, 0.70) !important;
+        backdrop-filter: blur(28px) saturate(200%) !important;
+        -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.88) !important;
+        border-top: 1.5px solid #FFFFFF !important;
+        border-radius: 9999px !important;
+        padding: 5px 6px !important;
+        gap: 6px !important;
+        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), inset 0 1px 1px #FFFFFF !important;
+        margin-bottom: 2rem !important;
+        align-items: center !important;
+    }
+
+    /* Individual Tab Items */
+    div[data-testid="stTabs"] button[data-baseweb="tab"],
+    .stTabs button[data-baseweb="tab"],
+    div[data-testid="stTabs"] button[role="tab"],
+    .stTabs button[role="tab"] {
+        height: 38px !important;
+        border-radius: 9999px !important;
+        background: transparent !important;
+        border: 1px solid transparent !important;
+        padding: 0 20px !important;
+        margin: 0 !important;
+        color: #475569 !important;
+        font-size: 0.88rem !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.01em !important;
+        transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        cursor: pointer !important;
+        outline: none !important;
+        box-shadow: none !important;
+        white-space: nowrap !important;
+    }
+
+    div[data-testid="stTabs"] button[data-baseweb="tab"]:hover,
+    .stTabs button[data-baseweb="tab"]:hover,
+    div[data-testid="stTabs"] button[role="tab"]:hover,
+    .stTabs button[role="tab"]:hover {
         color: #0F172A !important;
-        box-shadow: 0 3px 12px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+        background: rgba(255, 255, 255, 0.50) !important;
+        border-color: rgba(255, 255, 255, 0.8) !important;
+    }
+
+    div[data-testid="stTabs"] button[data-baseweb="tab"]:active,
+    .stTabs button[data-baseweb="tab"]:active {
+        transform: scale(0.98);
+    }
+
+    /* Active Segmented Pill (Apple White Glaze + Blue Text) */
+    div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"],
+    .stTabs button[data-baseweb="tab"][aria-selected="true"],
+    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
+    .stTabs button[role="tab"][aria-selected="true"] {
+        background: #FFFFFF !important;
+        color: #0071E3 !important;
+        font-weight: 700 !important;
+        border-radius: 9999px !important;
+        border: 1px solid rgba(255, 255, 255, 1.0) !important;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04), inset 0 1px 1px #FFFFFF !important;
+        border-bottom: none !important;
+    }
+
+    div[data-testid="stTabs"] button[data-baseweb="tab"] p,
+    .stTabs button[data-baseweb="tab"] p,
+    div[data-testid="stTabs"] button[role="tab"] p,
+    .stTabs button[role="tab"] p {
+        font-size: 0.88rem !important;
+        font-weight: inherit !important;
+        color: inherit !important;
+        margin: 0 !important;
+        line-height: 1.2 !important;
+    }
+
+    div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] p,
+    .stTabs button[data-baseweb="tab"][aria-selected="true"] p,
+    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p,
+    .stTabs button[role="tab"][aria-selected="true"] p {
+        color: #0071E3 !important;
+        font-weight: 700 !important;
+    }
+
+    /* =========================================================
+       APPLE LIQUID GLASS SELECTBOX & DROPDOWN CONTROLS
+       ========================================================= */
+    div[data-baseweb="select"] {
+        border-radius: 12px !important;
+    }
+    div[data-baseweb="select"] > div {
+        background: rgba(255, 255, 255, 0.82) !important;
+        backdrop-filter: blur(20px) saturate(190%) !important;
+        -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.95) !important;
+        border-top: 1.5px solid #FFFFFF !important;
+        border-radius: 12px !important;
+        box-shadow: 0 3px 12px -2px rgba(15, 23, 42, 0.04), inset 0 1px 1px #FFFFFF !important;
+        color: #0F172A !important;
+        font-weight: 600 !important;
+        font-size: 0.90rem !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    div[data-baseweb="select"] > div:hover {
+        border-color: rgba(0, 113, 227, 0.45) !important;
+        box-shadow: 0 4px 16px -2px rgba(0, 113, 227, 0.10), inset 0 1px 1px #FFFFFF !important;
+    }
+    div[data-baseweb="select"] > div:focus-within {
+        border-color: #0071E3 !important;
+        box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.16), 0 4px 14px rgba(0, 113, 227, 0.08) !important;
+    }
+
+    /* Popover menu dropdown */
+    div[data-baseweb="popover"],
+    div[data-baseweb="menu"],
+    ul[role="listbox"] {
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(24px) saturate(200%) !important;
+        -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.95) !important;
+        border-radius: 14px !important;
+        box-shadow: 0 14px 35px -4px rgba(15, 23, 42, 0.12), inset 0 1px 1px #FFFFFF !important;
+        padding: 6px !important;
+    }
+    li[role="option"] {
+        border-radius: 8px !important;
+        padding: 8px 14px !important;
+        color: #1E293B !important;
+        font-weight: 500 !important;
+        font-size: 0.88rem !important;
+        transition: all 0.15s ease !important;
+    }
+    li[role="option"]:hover,
+    li[role="option"][aria-selected="true"] {
+        background: rgba(0, 113, 227, 0.08) !important;
+        color: #0071E3 !important;
+        font-weight: 700 !important;
+    }
+
+    /* =========================================================
+       APPLE FROSTED GLASS MULTISELECT TAGS & PILLS
+       ========================================================= */
+    span[data-baseweb="tag"] {
+        background: rgba(0, 113, 227, 0.08) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border: 1px solid rgba(0, 113, 227, 0.22) !important;
+        border-radius: 9999px !important;
+        padding: 2px 10px !important;
+        color: #0071E3 !important;
+        font-weight: 600 !important;
+        font-size: 0.80rem !important;
+        box-shadow: 0 1px 3px rgba(0, 113, 227, 0.05) !important;
+        transition: all 0.15s ease !important;
+    }
+    span[data-baseweb="tag"] span {
+        color: #0071E3 !important;
+    }
+    span[data-baseweb="tag"]:hover {
+        background: rgba(0, 113, 227, 0.14) !important;
+        border-color: rgba(0, 113, 227, 0.35) !important;
+    }
+    span[data-baseweb="tag"] [data-role="remove"] {
+        color: #0071E3 !important;
+    }
+
+    /* =========================================================
+       APPLE FROSTED GLASS DATE & TEXT INPUTS
+       ========================================================= */
+    div[data-baseweb="input"] > div,
+    input[type="text"] {
+        background: rgba(255, 255, 255, 0.82) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.95) !important;
+        border-radius: 12px !important;
+        color: #0F172A !important;
+        font-weight: 600 !important;
+        font-size: 0.88rem !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03), inset 0 1px 1px #FFFFFF !important;
+    }
+    div[data-baseweb="input"] > div:focus-within {
+        border-color: #0071E3 !important;
+        box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.16) !important;
+    }
+
+    /* Widget Labels */
+    label[data-testid="stWidgetLabel"] p,
+    div[data-testid="stWidgetLabel"] label {
+        font-size: 0.84rem !important;
+        font-weight: 600 !important;
+        color: #334155 !important;
+        letter-spacing: -0.01em !important;
+        margin-bottom: 4px !important;
     }
     </style>
     """,
