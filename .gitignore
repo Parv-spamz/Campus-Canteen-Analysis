@@ -1,0 +1,27 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environments & IDEs
+venv/
+.venv/
+env/
+.env
+.vscode/
+.idea/
+
+# Streamlit secrets & credentials
+.streamlit/secrets.toml
+.streamlit/credentials.toml
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
