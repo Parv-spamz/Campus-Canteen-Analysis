@@ -53,503 +53,396 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-    /* Apple Dynamic Ambient Mesh Background */
-    html, body, .stApp {
-        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Plus Jakarta Sans", sans-serif;
-        background: 
-            radial-gradient(at 10% 12%, rgba(56, 189, 248, 0.15) 0px, transparent 45%),
-            radial-gradient(at 90% 15%, rgba(245, 158, 11, 0.13) 0px, transparent 40%),
-            radial-gradient(at 35% 85%, rgba(16, 185, 129, 0.10) 0px, transparent 50%),
-            radial-gradient(at 85% 82%, rgba(139, 92, 246, 0.12) 0px, transparent 45%),
-            #EDF2F7 !important;
-        background-attachment: fixed !important;
-        color: #0F172A !important;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kalam:wght@700&display=swap');
+
+    :root {
+        --ink: #0B1220;
+        --ink-2: #334155;
+        --ink-3: #64748B;
+        --card: #FFFFFF;
+        --card-shadow: 0 14px 30px -14px rgba(28, 38, 66, 0.30), 0 2px 6px rgba(28, 38, 66, 0.06);
+        --dark: #111613;
     }
 
-    .block-container {
-        padding-top: 1.85rem;
-        padding-bottom: 3.5rem;
-        padding-left: 2.5rem;
-        padding-right: 2.5rem;
-        max-width: 1440px;
+    html, body, .stApp, button, input, textarea, select {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
     }
 
-    /* Primary Title Lockup */
+    /* ---------- Backdrop: a dark, out-of-focus scene the glass refracts ---------- */
+    .stApp {
+        background:
+            radial-gradient(ellipse 34% 75% at 0% 45%, #0c1511 0%, transparent 100%),
+            radial-gradient(ellipse 30% 70% at 100% 40%, #101b15 0%, transparent 100%),
+            radial-gradient(ellipse 55% 38% at 50% 105%, #b79f9c 0%, transparent 100%),
+            radial-gradient(ellipse 70% 40% at 50% -5%, #5f7090 0%, transparent 100%),
+            #1d2823 !important;
+        color: var(--ink) !important;
+    }
+    .stApp::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background:
+            radial-gradient(circle 190px at 12% 18%, rgba(120, 160, 110, 0.35), transparent 70%),
+            radial-gradient(circle 150px at 90% 70%, rgba(196, 150, 120, 0.30), transparent 70%),
+            radial-gradient(circle 220px at 70% 12%, rgba(120, 150, 200, 0.28), transparent 70%),
+            radial-gradient(circle 160px at 25% 88%, rgba(70, 110, 90, 0.35), transparent 70%);
+    }
+
+    /* Keep Streamlit's icon font intact */
+    [data-testid="stIconMaterial"], span[class*="material"] {
+        font-family: "Material Symbols Rounded", "Material Symbols Outlined" !important;
+    }
+    div[data-testid="stMainBlockContainer"] { box-sizing: border-box; width: 100%; }
+
+    /* Streamlit chrome: no grey bar, no deploy/menu */
+    header[data-testid="stHeader"] { background: transparent !important; box-shadow: none !important; }
+    div[data-testid="stToolbar"], div[data-testid="stDecoration"], .stAppDeployButton { display: none !important; }
+
+    /* ---------- Main glass shell ---------- */
+    /* The shell is the scroll container itself, so it stays put like the sidebar */
+    section[data-testid="stMain"], div[data-testid="stMain"] {
+        margin: 14px 14px 14px 0 !important;
+        height: calc(100vh - 28px) !important;
+        border-radius: 0 28px 28px 0;
+        overflow-y: auto !important;
+        will-change: scroll-position;
+        transform: translateZ(0);
+        contain: layout paint;
+        overscroll-behavior: contain;
+        background: linear-gradient(180deg, rgba(168, 184, 212, 0.80) 0%, rgba(196, 192, 208, 0.78) 55%, rgba(226, 214, 218, 0.82) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.40);
+        border-left: none;
+        box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.55);
+    }
+    div[data-testid="stMainBlockContainer"], .block-container {
+        max-width: none !important;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0 !important;
+        padding: 2.1rem 2.4rem 2.6rem 2.4rem !important;
+        background: transparent !important;
+    }
+
+    /* ---------- Title ---------- */
     .app-title {
-        font-size: 2.15rem;
+        font-size: 2.7rem;
         font-weight: 800;
-        letter-spacing: -0.04em;
-        color: #0F172A !important;
+        letter-spacing: -0.045em;
+        color: var(--ink) !important;
         margin: 0 0 4px 0;
-        line-height: 1.15;
+        padding: 0;
+        line-height: 1.08;
     }
     .app-subtitle {
-        font-size: 0.98rem;
-        font-weight: 400;
-        color: #475569 !important;
-        margin: 0 0 16px 0;
-        line-height: 1.5;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: rgba(11, 18, 32, 0.62) !important;
+        margin: 0 0 1.4rem 0;
     }
 
-    /* Apple Liquid Glass Status Pill */
+    /* Dark pill (like the reference's primary button) */
     .glass-status-pill {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        background: rgba(255, 255, 255, 0.8) !important;
-        border: 1px solid rgba(255, 255, 255, 0.95);
-        border-top: 1.5px solid #FFFFFF;
-        backdrop-filter: blur(16px) saturate(180%);
-        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        gap: 9px;
+        background: var(--dark) !important;
         border-radius: 9999px;
-        padding: 5px 16px;
-        font-size: 0.80rem;
+        padding: 9px 18px;
+        font-size: 0.84rem;
         font-weight: 600;
-        color: #0071E3 !important;
-        box-shadow: 0 4px 14px rgba(0, 113, 227, 0.08), inset 0 1px 1px #FFFFFF;
+        color: #FFFFFF !important;
+        box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.45);
     }
     .status-dot-pulse {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: #0071E3;
-        box-shadow: 0 0 10px rgba(0, 113, 227, 0.7);
+        width: 8px; height: 8px; border-radius: 50%;
+        background-color: #7CE0A3;
+        box-shadow: 0 0 8px rgba(124, 224, 163, 0.8);
     }
 
-    /* Apple Notice Callout */
-    .glass-banner {
-        background: rgba(255, 255, 255, 0.75) !important;
-        backdrop-filter: blur(24px) saturate(190%);
-        -webkit-backdrop-filter: blur(24px) saturate(190%);
-        border: 1px solid rgba(255, 255, 255, 0.9);
-        border-left: 4.5px solid #0071E3;
-        border-radius: 14px;
-        padding: 13px 20px;
-        margin-bottom: 1.75rem;
-        color: #334155 !important;
-        font-size: 0.88rem;
-        line-height: 1.55;
-        box-shadow: 0 6px 20px -3px rgba(15, 23, 42, 0.05), inset 0 1px 1px #FFFFFF;
-    }
-    .glass-banner strong {
-        color: #0F172A !important;
-    }
-
-    /* Liquid Glass KPI Cards Grid */
+    /* ---------- White cards ---------- */
     .kpi-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 18px;
-        margin-bottom: 1.85rem;
+        margin-bottom: 1.6rem;
     }
-
-    /* Individual Tinted Liquid Glass Cards */
+    @media (max-width: 1100px) { .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     .liquid-card {
-        backdrop-filter: blur(24px) saturate(190%);
-        -webkit-backdrop-filter: blur(24px) saturate(190%);
-        border: 1px solid rgba(255, 255, 255, 0.85) !important;
-        border-top: 1.5px solid rgba(255, 255, 255, 1.0) !important;
-        border-radius: 18px;
+        background: var(--card) !important;
+        border-radius: 20px;
         padding: 20px 22px;
-        box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03), inset 0 1px 2px rgba(255, 255, 255, 0.95);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        box-shadow: var(--card-shadow);
         transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .liquid-card:hover {
-        transform: translateY(-3px) scale(1.008);
-        box-shadow: 0 18px 36px -6px rgba(15, 23, 42, 0.10), inset 0 1px 2px #FFFFFF;
-    }
-
-    /* Specific Liquid Color Tints */
-    .liquid-amber {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(254, 243, 199, 0.55) 100%) !important;
-    }
-    .liquid-sky {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(224, 242, 254, 0.55) 100%) !important;
-    }
-    .liquid-mint {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(209, 250, 229, 0.55) 100%) !important;
-    }
-    .liquid-purple {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(243, 232, 255, 0.55) 100%) !important;
-    }
-    .liquid-neutral {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(241, 245, 249, 0.65) 100%) !important;
-    }
-
-    .kpi-title {
-        font-size: 0.77rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.07em;
-        color: #64748B !important;
-        margin-bottom: 8px;
-    }
-    .kpi-metric {
-        font-size: 2.15rem;
-        font-weight: 800;
-        color: #0F172A !important;
-        line-height: 1.1;
-        letter-spacing: -0.035em;
-    }
+    .liquid-card:hover { transform: translateY(-3px); box-shadow: 0 22px 40px -16px rgba(28, 38, 66, 0.38), 0 2px 6px rgba(28, 38, 66, 0.06); }
+    .kpi-title { font-size: 0.86rem; font-weight: 600; color: var(--ink-2) !important; margin-bottom: 10px; }
+    .kpi-metric { font-size: 2.05rem; font-weight: 700; color: var(--ink) !important; line-height: 1.1; letter-spacing: -0.035em; }
     .kpi-foot {
-        font-size: 0.82rem;
-        font-weight: 600;
+        font-size: 0.8rem;
+        font-weight: 500;
+        margin-top: 8px;
+        color: var(--ink-3) !important;
+    }
+
+    .section-header {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--ink) !important;
+        letter-spacing: -0.02em;
+        margin: 0 0 6px 0;
+    }
+    .section-label { font-size: 0.9rem; font-weight: 700; color: var(--ink) !important; margin: 14px 0 6px 0; }
+
+    /* Chart panel = real bordered container, solid white */
+    div[class*="st-key-panel"] {
+        background: var(--card) !important;
+        border: none !important;
+        border-radius: 20px !important;
+        padding: 16px 20px 24px 20px !important;
+        margin-bottom: 8px;
+        box-shadow: var(--card-shadow);
+    }
+
+    .forecast-summary-panel {
+        background: var(--card) !important;
+        border-radius: 20px;
+        padding: 20px 24px;
+        margin-bottom: 1.6rem;
+        box-shadow: var(--card-shadow);
+    }
+    .forecast-summary-title { font-size: 1.1rem; font-weight: 700; color: var(--ink) !important; margin-bottom: 8px; }
+    .forecast-summary-body { font-size: 0.93rem; color: var(--ink-2) !important; line-height: 1.65; }
+    .forecast-summary-body strong { color: #3B4BD6 !important; }
+
+    /* ---------- Dark frosted sidebar ---------- */
+    section[data-testid="stSidebar"] { background: transparent !important; border: none !important; box-shadow: none !important; }
+    section[data-testid="stSidebar"] > div:first-child {
+        margin: 14px 0 14px 14px;
+        width: calc(100% - 14px) !important;
+        box-sizing: border-box;
+        height: calc(100vh - 28px);
+        border-radius: 28px 0 0 28px;
+        background: rgba(22, 30, 26, 0.55) !important;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+    }
+    section[data-testid="stSidebar"] *,
+    section[data-testid="stSidebar"] label p,
+    section[data-testid="stSidebar"] .stMarkdown p,
+    section[data-testid="stSidebar"] h3 { color: #EEF2EF !important; }
+    section[data-testid="stSidebar"] hr { border-color: rgba(255, 255, 255, 0.14) !important; }
+    section[data-testid="stSidebar"] h3 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; }
+    section[data-testid="stSidebar"] svg { fill: rgba(255, 255, 255, 0.75) !important; color: rgba(255, 255, 255, 0.75) !important; }
+
+    /* Sidebar can never be hidden */
+    section[data-testid="stSidebar"], section[data-testid="stSidebar"][aria-expanded="false"] {
+        transform: none !important;
+        margin-left: 0 !important;
+        visibility: visible !important;
+        min-width: 21rem !important;
+        width: 21rem !important;
+    }
+
+    /* Expanders = white cards */
+    div[data-testid="stExpander"] {
+        background: var(--card) !important;
+        border: none !important;
+        border-radius: 20px !important;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
         margin-top: 8px;
     }
-    .kpi-foot.amber { color: #D97706 !important; }
-    .kpi-foot.sky { color: #0071E3 !important; }
-    .kpi-foot.emerald { color: #059669 !important; }
-    .kpi-foot.purple { color: #7C3AED !important; }
-    .kpi-foot.slate { color: #64748B !important; }
+    div[data-testid="stExpander"] details, div[data-testid="stExpander"] summary { background: transparent !important; border: none !important; }
+    div[data-testid="stExpander"] summary { padding: 16px 22px !important; }
+    div[data-testid="stExpander"] summary p { font-weight: 700 !important; color: var(--ink) !important; font-size: 0.98rem !important; }
+    div[data-testid="stExpander"] summary:hover { background: rgba(17, 22, 19, 0.04) !important; }
+    div[data-testid="stExpander"] [data-testid="stExpanderDetails"] { padding: 0 22px 18px 22px !important; color: var(--ink-2) !important; }
+    div[data-testid="stExpander"] [data-testid="stExpanderDetails"] p, div[data-testid="stExpander"] li { color: var(--ink-2) !important; }
 
-    /* Section Headings */
-    .section-header {
-        font-size: 1.25rem;
+    /* Handwritten signature pinned to the bottom of the sidebar */
+    .signature {
+        position: static;
+        padding: 18px 0 6px 0;
+        text-align: center;
+        pointer-events: none;
+        transform: rotate(-3deg);
+        transform-origin: center;
+    }
+    .signature .sig-name {
+        font-family: "Ink Free", "Kalam", "Segoe Print", cursive !important;
+        font-size: 1.7rem;
         font-weight: 700;
-        color: #0F172A !important;
-        letter-spacing: -0.02em;
-        margin: 0 0 4px 0;
+        line-height: 1.05;
     }
-    .section-caption {
-        font-size: 0.86rem;
-        color: #64748B !important;
-        margin: 0 0 14px 0;
+    .signature svg { display: block; margin: 4px auto 0; width: 80%; height: 10px; overflow: visible; }
+    section[data-testid="stSidebar"] [data-testid="stSidebarUserContent"] > [data-testid="stVerticalBlock"] { min-height: calc(100vh - 28px - 3.6rem); }
+    section[data-testid="stSidebar"] [data-testid="stElementContainer"]:has(.signature) { margin-top: auto; }
+
+    section[data-testid="stSidebar"] .signature, section[data-testid="stSidebar"] .signature * { color: #FFFFFF !important; }
+
+    /* If Streamlit auto-collapses the sidebar (narrow windows), keep the layout identical */
+    div[data-testid="stAppViewContainer"]:has(section[data-testid="stSidebar"][aria-expanded="false"]) section[data-testid="stMain"] {
+        margin-left: 21rem !important;
+        width: calc(100% - 21rem - 14px) !important;
+    }
+    section[data-testid="stSidebar"][aria-expanded="false"] { position: fixed !important; z-index: 100; left: 0; top: 0; }
+
+    /* Hide scrollbars (scrolling still works) */
+    section[data-testid="stMain"], section[data-testid="stSidebar"], section[data-testid="stSidebar"] > div, [data-testid="stSidebarContent"] {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+    }
+    section[data-testid="stMain"]::-webkit-scrollbar, section[data-testid="stSidebar"] *::-webkit-scrollbar,
+    section[data-testid="stSidebar"]::-webkit-scrollbar, html::-webkit-scrollbar, body::-webkit-scrollbar {
+        display: none !important; width: 0 !important; height: 0 !important;
     }
 
-    /* Apple Glass Chart Panel */
-    .chart-glass-panel {
-        background: rgba(255, 255, 255, 0.80) !important;
-        backdrop-filter: blur(24px) saturate(190%);
-        -webkit-backdrop-filter: blur(24px) saturate(190%);
-        border: 1px solid rgba(255, 255, 255, 0.9) !important;
-        border-top: 1.5px solid rgba(255, 255, 255, 1.0) !important;
-        border-radius: 18px;
-        padding: 22px 24px 14px 24px;
-        margin-bottom: 20px;
-        box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02), inset 0 1px 2px rgba(255, 255, 255, 0.95);
-    }
+    /* Fixed sidebar: no collapse, no resize, content aligned with the shell */
+    [data-testid="stSidebarHeader"], [data-testid="stSidebarCollapseButton"],
+    [data-testid="stExpandSidebarButton"], [data-testid="stSidebarCollapsedControl"],
+    [data-testid="stSidebarResizeHandle"] { display: none !important; }
+    section[data-testid="stSidebar"] [data-testid="stSidebarUserContent"] { padding: 2.1rem 1.5rem 1.5rem 1.5rem !important; }
+    section[data-testid="stSidebar"] h3 { margin-top: 0 !important; padding-top: 0 !important; }
 
-    /* Forecast Highlight Glass Box */
-    .forecast-summary-panel {
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(238, 246, 255, 0.85) 100%) !important;
-        backdrop-filter: blur(24px) saturate(190%);
-        -webkit-backdrop-filter: blur(24px) saturate(190%);
-        border: 1.5px solid rgba(0, 113, 227, 0.25) !important;
-        border-top: 1.5px solid rgba(255, 255, 255, 1.0) !important;
-        border-radius: 18px;
-        padding: 22px 26px;
-        margin-bottom: 1.85rem;
-        box-shadow: 0 12px 32px -4px rgba(0, 113, 227, 0.08), inset 0 1px 2px #FFFFFF;
-    }
-    .forecast-summary-title {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #0F172A !important;
-        margin-bottom: 8px;
-    }
-    .forecast-summary-body {
-        font-size: 0.94rem;
-        color: #334155 !important;
-        line-height: 1.6;
-    }
-    .forecast-summary-body strong {
-        color: #0071E3 !important;
-    }
-
-    /* Translucent Frosted Sidebar */
-    section[data-testid="stSidebar"] {
-        background: rgba(255, 255, 255, 0.65) !important;
-        backdrop-filter: blur(24px) saturate(190%) !important;
-        -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.8) !important;
-        box-shadow: 4px 0 24px rgba(15, 23, 42, 0.03);
-    }
-    section[data-testid="stSidebar"] .stMarkdown p {
-        color: #334155 !important;
-    }
-    section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3 {
-        color: #0F172A !important;
-    }
-
-    /* =========================================================
-       APPLE LIQUID GLASS SEGMENTED NAVIGATION CONTROL (TABS)
-       ========================================================= */
-    /* Neutralize default lines, dividers, and BaseWeb legacy borders */
-    div[data-testid="stTabs"] [role="tablist"]::after,
+    /* ---------- Tabs: glass track, dark sliding pill ---------- */
     div[data-testid="stTabs"] [data-baseweb="tab-border"],
-    div[data-testid="stTabs"] [data-baseweb="tab-highlight"],
-    .stTabs [data-baseweb="tab-border"],
-    .stTabs [data-baseweb="tab-highlight"],
-    [data-baseweb="tab-border"],
-    [data-baseweb="tab-highlight"],
-    div[data-testid="stTabs"] div::after {
-        display: none !important;
-        content: none !important;
-        height: 0px !important;
-        width: 0px !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        border: none !important;
-    }
-    div[data-testid="stTabs"] > div:first-child,
-    .stTabs > div:first-child {
-        border-bottom: none !important;
-        box-shadow: none !important;
-        background: transparent !important;
-        padding-bottom: 0px !important;
-    }
-
-    /* Elevated Floating Glass Capsule Track */
-    div[data-testid="stTabs"] [role="tablist"],
-    div[data-testid="stTabs"] div[aria-label="Tabs"],
-    .stTabs [role="tablist"],
-    div[data-testid="stTabs"] [data-baseweb="tab-list"],
-    .stTabs [data-baseweb="tab-list"] {
+    div[data-testid="stTabs"] [data-baseweb="tab-highlight"] { display: none !important; }
+    div[data-testid="stTabs"] [role="tablist"] {
         display: flex !important;
         width: 100% !important;
-        max-width: 900px !important;
-        background: rgba(255, 255, 255, 0.72) !important;
-        backdrop-filter: blur(28px) saturate(200%) !important;
-        -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.90) !important;
-        border-top: 1.5px solid #FFFFFF !important;
+        max-width: 860px !important;
+        gap: 4px !important;
+        padding: 5px !important;
+        margin-bottom: 1.8rem !important;
+        background: rgba(255, 255, 255, 0.32) !important;
+        border: 1px solid rgba(255, 255, 255, 0.55) !important;
         border-radius: 9999px !important;
-        padding: 5px 6px !important;
-        gap: 6px !important;
-        box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), inset 0 1px 1px #FFFFFF !important;
-        margin-bottom: 2.25rem !important;
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
         position: relative !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        overflow: hidden !important;
     }
-
-    /* Designated Equal Spot for Each Tab (25% each) */
-    div[data-testid="stTabs"] [data-testid="stTab"],
-    .stTabs [data-testid="stTab"],
-    div[data-testid="stTabs"] button[role="tab"],
-    .stTabs button[role="tab"],
-    div[data-testid="stTabs"] button[data-baseweb="tab"],
-    .stTabs button[data-baseweb="tab"] {
+    div[data-testid="stTabs"] [data-testid="stTab"] {
         flex: 1 1 0 !important;
-        width: 25% !important;
         min-width: 0 !important;
-        height: 38px !important;
-        border-radius: 9999px !important;
-        background: transparent !important;
-        border: none !important;
-        padding: 0 12px !important;
-        margin: 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         text-align: center !important;
-        cursor: pointer !important;
+        height: 38px !important;
+        padding: 0 8px !important;
+        margin: 0 !important;
+        border: none !important;
+        border-radius: 9999px !important;
+        background: transparent !important;
         outline: none !important;
         box-shadow: none !important;
         position: relative !important;
-        transition: color 0.22s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease !important;
     }
-
-    /* Suppress Blue Focus Outline / Rectangles Completely */
-    div[data-testid="stTabs"] [data-testid="stTab"]:focus,
-    div[data-testid="stTabs"] [data-testid="stTab"]:focus-visible,
-    div[data-testid="stTabs"] [data-testid="stTab"][data-focus-visible],
-    div[data-testid="stTabs"] button[role="tab"]:focus,
-    div[data-testid="stTabs"] button[role="tab"]:focus-visible,
-    div[data-testid="stTabs"] button[data-baseweb="tab"]:focus {
-        outline: none !important;
-        border: none !important;
-        box-shadow: none !important;
+    div[data-testid="stTabs"] [data-testid="stTab"] [data-testid="stMarkdownContainer"] {
+        position: relative !important;
+        z-index: 2 !important;
+        width: 100% !important;
+        text-align: center !important;
     }
-
-    /* The Sliding Bubble (React Aria Animated Indicator) */
+    div[data-testid="stTabs"] [data-testid="stTab"] p {
+        text-align: center !important;
+        position: relative !important;
+        z-index: 2 !important;
+        margin: 0 !important;
+        font-size: 0.84rem !important;
+        font-weight: 600 !important;
+        color: var(--ink-2) !important;
+        white-space: nowrap !important;
+        transition: color 0.2s ease !important;
+    }
+    div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] p { color: #FFFFFF !important; }
+    div[data-testid="stTabs"] [data-testid="stTab"]:hover:not([aria-selected="true"]) p { color: var(--ink) !important; }
     div[data-testid="stTabs"] .react-aria-SelectionIndicator {
         position: absolute !important;
-        top: 0px !important;
-        left: 0px !important;
-        right: 0px !important;
-        bottom: 0px !important;
+        inset: 0 !important;
         width: 100% !important;
         height: 100% !important;
         border-radius: 9999px !important;
         background: transparent !important;
         pointer-events: none !important;
         z-index: 1 !important;
-        transition: translate 0.28s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease !important;
+        transition: translate 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] .react-aria-SelectionIndicator,
+    div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] .react-aria-SelectionIndicator,
+    div[data-testid="stTabs"] [data-testid="stTab"][data-selected] .react-aria-SelectionIndicator {
+        background: var(--dark) !important;
+        box-shadow: 0 8px 18px -6px rgba(0, 0, 0, 0.45) !important;
     }
 
-    /* Sliding Bubble Active Glow & Surface */
-    div[data-testid="stTabs"] [data-testid="stTab"][data-selected] .react-aria-SelectionIndicator,
-    div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] .react-aria-SelectionIndicator {
+    /* ---------- Inputs ---------- */
+    div[data-baseweb="select"] > div, div[data-baseweb="input"] > div {
         background: #FFFFFF !important;
-        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04), inset 0 1px 1px #FFFFFF !important;
-        border: 1px solid rgba(255, 255, 255, 1.0) !important;
-    }
-
-    /* Active Tab Container Styling */
-    div[data-testid="stTabs"] [data-testid="stTab"][data-selected],
-    div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"],
-    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
-        border-radius: 9999px !important;
-        color: #0071E3 !important;
-        font-weight: 700 !important;
-    }
-
-    /* Tab Text Layering (Sits on top of the sliding bubble) */
-    div[data-testid="stTabs"] [data-testid="stTab"] div[data-testid="stMarkdownContainer"],
-    div[data-testid="stTabs"] [data-testid="stTab"] p,
-    div[data-testid="stTabs"] button[role="tab"] p {
-        position: relative !important;
-        z-index: 2 !important;
-        margin: 0 !important;
-        font-size: 0.88rem !important;
-        letter-spacing: -0.01em !important;
-        text-align: center !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        transition: color 0.2s ease, font-weight 0.2s ease !important;
-    }
-
-    /* Inactive Tab Text */
-    div[data-testid="stTabs"] [data-testid="stTab"]:not([data-selected]):not([aria-selected="true"]) p,
-    div[data-testid="stTabs"] button[role="tab"]:not([aria-selected="true"]) p {
-        color: #475569 !important;
-        font-weight: 600 !important;
-    }
-
-    /* Inactive Tab Hover Feel */
-    div[data-testid="stTabs"] [data-testid="stTab"]:hover:not([data-selected]):not([aria-selected="true"]),
-    div[data-testid="stTabs"] button[role="tab"]:hover:not([aria-selected="true"]) {
-        background: rgba(255, 255, 255, 0.40) !important;
-    }
-    div[data-testid="stTabs"] [data-testid="stTab"]:hover:not([data-selected]):not([aria-selected="true"]) p,
-    div[data-testid="stTabs"] button[role="tab"]:hover:not([aria-selected="true"]) p {
-        color: #0F172A !important;
-    }
-
-    /* Active Selected Text */
-    div[data-testid="stTabs"] [data-testid="stTab"][data-selected] p,
-    div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] p,
-    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p {
-        color: #0071E3 !important;
-        font-weight: 700 !important;
-    }
-
-    /* =========================================================
-       APPLE LIQUID GLASS SELECTBOX & DROPDOWN CONTROLS
-       ========================================================= */
-    div[data-baseweb="select"] {
-        border-radius: 12px !important;
-    }
-    div[data-baseweb="select"] > div {
-        background: rgba(255, 255, 255, 0.82) !important;
-        backdrop-filter: blur(20px) saturate(190%) !important;
-        -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.95) !important;
-        border-top: 1.5px solid #FFFFFF !important;
-        border-radius: 12px !important;
-        box-shadow: 0 3px 12px -2px rgba(15, 23, 42, 0.04), inset 0 1px 1px #FFFFFF !important;
-        color: #0F172A !important;
-        font-weight: 600 !important;
-        font-size: 0.90rem !important;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    }
-    div[data-baseweb="select"] > div:hover {
-        border-color: rgba(0, 113, 227, 0.45) !important;
-        box-shadow: 0 4px 16px -2px rgba(0, 113, 227, 0.10), inset 0 1px 1px #FFFFFF !important;
-    }
-    div[data-baseweb="select"] > div:focus-within {
-        border-color: #0071E3 !important;
-        box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.16), 0 4px 14px rgba(0, 113, 227, 0.08) !important;
-    }
-
-    /* Popover menu dropdown */
-    div[data-baseweb="popover"],
-    div[data-baseweb="menu"],
-    ul[role="listbox"] {
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(24px) saturate(200%) !important;
-        -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.95) !important;
+        border: none !important;
         border-radius: 14px !important;
-        box-shadow: 0 14px 35px -4px rgba(15, 23, 42, 0.12), inset 0 1px 1px #FFFFFF !important;
-        padding: 6px !important;
+        box-shadow: 0 6px 16px -8px rgba(28, 38, 66, 0.35) !important;
+        color: var(--ink) !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
     }
-    li[role="option"] {
-        border-radius: 8px !important;
-        padding: 8px 14px !important;
-        color: #1E293B !important;
-        font-weight: 500 !important;
-        font-size: 0.88rem !important;
-        transition: all 0.15s ease !important;
+    div[data-baseweb="select"] > div:focus-within, div[data-baseweb="input"] > div:focus-within {
+        box-shadow: 0 0 0 2px rgba(17, 22, 19, 0.55) !important;
     }
-    li[role="option"]:hover,
-    li[role="option"][aria-selected="true"] {
-        background: rgba(0, 113, 227, 0.08) !important;
-        color: #0071E3 !important;
-        font-weight: 700 !important;
+    section[data-testid="stSidebar"] div[data-baseweb="select"] > div,
+    section[data-testid="stSidebar"] div[data-baseweb="input"] > div {
+        background: rgba(255, 255, 255, 0.10) !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        box-shadow: none !important;
     }
+    section[data-testid="stSidebar"] input { color: #FFFFFF !important; -webkit-text-fill-color: #FFFFFF !important; background: transparent !important; }
 
-    /* =========================================================
-       APPLE FROSTED GLASS MULTISELECT TAGS & PILLS
-       ========================================================= */
+    div[data-baseweb="popover"], div[data-baseweb="menu"], ul[role="listbox"] {
+        background: rgba(255, 255, 255, 0.96) !important;
+        border-radius: 14px !important;
+        border: none !important;
+        box-shadow: 0 18px 40px -10px rgba(0, 0, 0, 0.35) !important;
+    }
+    li[role="option"] { border-radius: 8px !important; color: var(--ink) !important; font-weight: 500 !important; font-size: 0.88rem !important; }
+    li[role="option"]:hover, li[role="option"][aria-selected="true"] { background: #EEF1F7 !important; font-weight: 700 !important; }
+
     span[data-baseweb="tag"] {
-        background: rgba(0, 113, 227, 0.08) !important;
-        backdrop-filter: blur(12px) !important;
-        -webkit-backdrop-filter: blur(12px) !important;
-        border: 1px solid rgba(0, 113, 227, 0.22) !important;
+        background: rgba(255, 255, 255, 0.16) !important;
+        border: 1px solid rgba(255, 255, 255, 0.22) !important;
         border-radius: 9999px !important;
         padding: 2px 10px !important;
-        color: #0071E3 !important;
         font-weight: 600 !important;
-        font-size: 0.80rem !important;
-        box-shadow: 0 1px 3px rgba(0, 113, 227, 0.05) !important;
-        transition: all 0.15s ease !important;
+        font-size: 0.78rem !important;
     }
-    span[data-baseweb="tag"] span {
-        color: #0071E3 !important;
-    }
-    span[data-baseweb="tag"]:hover {
-        background: rgba(0, 113, 227, 0.14) !important;
-        border-color: rgba(0, 113, 227, 0.35) !important;
-    }
-    span[data-baseweb="tag"] [data-role="remove"] {
-        color: #0071E3 !important;
-    }
+    section[data-testid="stSidebar"] span[data-baseweb="tag"] span { color: #FFFFFF !important; }
 
-    /* =========================================================
-       APPLE FROSTED GLASS DATE & TEXT INPUTS
-       ========================================================= */
-    div[data-baseweb="input"] > div,
-    input[type="text"] {
-        background: rgba(255, 255, 255, 0.82) !important;
-        backdrop-filter: blur(16px) !important;
-        -webkit-backdrop-filter: blur(16px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.95) !important;
-        border-radius: 12px !important;
-        color: #0F172A !important;
-        font-weight: 600 !important;
-        font-size: 0.88rem !important;
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03), inset 0 1px 1px #FFFFFF !important;
-    }
-    div[data-baseweb="input"] > div:focus-within {
-        border-color: #0071E3 !important;
-        box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.16) !important;
-    }
 
-    /* Widget Labels */
-    label[data-testid="stWidgetLabel"] p,
-    div[data-testid="stWidgetLabel"] label {
-        font-size: 0.84rem !important;
-        font-weight: 600 !important;
-        color: #334155 !important;
-        letter-spacing: -0.01em !important;
-        margin-bottom: 4px !important;
+    /* Streamlit 1.5x widget DOM (react-aria) */
+    div[data-testid="stDateInputField"], .react-aria-ComboBox > div {
+        background: #FFFFFF !important;
+        border: none !important;
+        border-radius: 14px !important;
+        box-shadow: 0 6px 16px -8px rgba(28, 38, 66, 0.35) !important;
     }
+    section[data-testid="stSidebar"] div[data-testid="stDateInputField"],
+    section[data-testid="stSidebar"] .react-aria-ComboBox > div {
+        background: rgba(255, 255, 255, 0.10) !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        box-shadow: none !important;
+    }
+    section[data-testid="stSidebar"] span[data-tag] {
+        background: rgba(255, 255, 255, 0.18) !important;
+        border: 1px solid rgba(255, 255, 255, 0.26) !important;
+        border-radius: 9999px !important;
+    }
+    section[data-testid="stSidebar"] span[data-tag] * { color: #FFFFFF !important; }
+
+    label[data-testid="stWidgetLabel"] p { font-size: 0.84rem !important; font-weight: 600 !important; color: var(--ink-2) !important; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -675,23 +568,11 @@ with head_right:
         unsafe_allow_html=True,
     )
 
-st.markdown(
-    """
-    <div class="glass-banner">
-        <strong>Academic Showcase Notice:</strong> This application analyses a 180-day historical order log (5,970 orders) 
-        and trains an ensemble <code>RandomForestRegressor</code> to forecast daily batch preparation requirements, 
-        helping kitchen staff eliminate food spoilage while preventing stockouts.
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
 
 # -------------------------------------------------------------
 # SIDEBAR CONTROLS
 # -------------------------------------------------------------
 st.sidebar.markdown("### Filter Console")
-st.sidebar.caption("Slice historical sales transactions in real time.")
 
 min_dt = df_raw["date"].min().date()
 max_dt = df_raw["date"].max().date()
@@ -743,6 +624,13 @@ st.sidebar.markdown(
     """
 )
 
+st.sidebar.markdown(
+    '<div class="signature"><div class="sig-name">made by parv arora<br>&amp; anshika trikha</div>'
+    '<svg viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M1 6 C 50 5, 120 7, 199 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+    '</div>',
+    unsafe_allow_html=True,
+)
+
 if df_filtered.empty:
     st.warning("No records match the current filter selection. Please broaden your filters in the sidebar.")
     st.stop()
@@ -787,7 +675,6 @@ with tab_overview:
             <div class="liquid-card liquid-purple">
                 <div class="kpi-title">Average Order Value</div>
                 <div class="kpi-metric">{kpi['formatted_aov']}</div>
-                <div class="kpi-foot purple">Per customer transaction</div>
             </div>
         </div>
         """,
@@ -798,145 +685,135 @@ with tab_overview:
     r1_col1, r1_col2 = st.columns([1.6, 1.0])
 
     with r1_col1:
-        st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Daily Revenue Trend</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-caption">Historical daily cash flow with 7-day smoothed moving average.</div>', unsafe_allow_html=True)
-        daily_trend = get_daily_trend(df_filtered)
+        with st.container(border=True, key="panel1"):
+            st.markdown('<div class="section-header">Daily Revenue Trend</div>', unsafe_allow_html=True)
+            daily_trend = get_daily_trend(df_filtered)
 
-        fig_trend = go.Figure()
-        fig_trend.add_trace(
-            go.Scatter(
-                x=daily_trend["date"],
-                y=daily_trend["revenue"],
-                mode="lines",
-                name="Daily Revenue",
-                line=dict(color="rgba(100, 116, 139, 0.45)", width=1.5),
-                hovertemplate="<b>%{x|%b %d, %Y}</b><br>Revenue: ₹%{y:,.0f}<extra></extra>",
+            fig_trend = go.Figure()
+            fig_trend.add_trace(
+                go.Scatter(
+                    x=daily_trend["date"],
+                    y=daily_trend["revenue"],
+                    mode="lines",
+                    name="Daily Revenue",
+                    line=dict(color="rgba(100, 116, 139, 0.45)", width=1.5),
+                    hovertemplate="<b>%{x|%b %d, %Y}</b><br>Revenue: ₹%{y:,.0f}<extra></extra>",
+                )
             )
-        )
-        fig_trend.add_trace(
-            go.Scatter(
-                x=daily_trend["date"],
-                y=daily_trend["rolling_7d_revenue"],
-                mode="lines",
-                name="7-Day Moving Avg",
-                line=dict(color="#0071E3", width=3.2),
-                hovertemplate="<b>7-Day Trend:</b> ₹%{y:,.0f}<extra></extra>",
+            fig_trend.add_trace(
+                go.Scatter(
+                    x=daily_trend["date"],
+                    y=daily_trend["rolling_7d_revenue"],
+                    mode="lines",
+                    name="7-Day Moving Avg",
+                    line=dict(color="#0071E3", width=3.2),
+                    hovertemplate="<b>7-Day Trend:</b> ₹%{y:,.0f}<extra></extra>",
+                )
             )
-        )
-        fig_trend.update_layout(
-            hovermode="x unified",
-            yaxis_title="Revenue (₹)",
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        )
-        apply_glass_theme(fig_trend, height=310)
-        st.plotly_chart(fig_trend, width="stretch")
-        st.markdown('</div>', unsafe_allow_html=True)
+            fig_trend.update_layout(
+                hovermode="x unified",
+                yaxis_title="Revenue (₹)",
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            )
+            apply_glass_theme(fig_trend, height=310)
+            st.plotly_chart(fig_trend, width="stretch")
 
     with r1_col2:
-        st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Revenue by Department</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-caption">Percentage share of revenue per food category.</div>', unsafe_allow_html=True)
-        cat_perf = get_category_performance(df_filtered)
+        with st.container(border=True, key="panel2"):
+            st.markdown('<div class="section-header">Revenue by Department</div>', unsafe_allow_html=True)
+            cat_perf = get_category_performance(df_filtered)
 
-        fig_pie = px.pie(
-            cat_perf,
-            names="category",
-            values="revenue",
-            hole=0.62,
-            color="category",
-            color_discrete_map=CATEGORY_PALETTE,
-        )
-        fig_pie.update_traces(
-            textposition="inside",
-            textinfo="percent+label",
-            textfont=dict(color="#FFFFFF", size=11, family="Plus Jakarta Sans"),
-            hovertemplate="<b>%{label}</b><br>Revenue: ₹%{value:,.0f}<br>Share: %{percent}<extra></extra>",
-        )
-        fig_pie.update_layout(showlegend=False)
-        apply_glass_theme(fig_pie, height=310)
-        st.plotly_chart(fig_pie, width="stretch")
-        st.markdown('</div>', unsafe_allow_html=True)
+            fig_pie = px.pie(
+                cat_perf,
+                names="category",
+                values="revenue",
+                hole=0.62,
+                color="category",
+                color_discrete_map=CATEGORY_PALETTE,
+            )
+            fig_pie.update_traces(
+                textposition="inside",
+                textinfo="percent+label",
+                textfont=dict(color="#FFFFFF", size=11, family="Plus Jakarta Sans"),
+                hovertemplate="<b>%{label}</b><br>Revenue: ₹%{value:,.0f}<br>Share: %{percent}<extra></extra>",
+            )
+            fig_pie.update_layout(showlegend=False)
+            apply_glass_theme(fig_pie, height=310)
+            st.plotly_chart(fig_pie, width="stretch")
 
     # Row 2: Top Selling Items, Hourly Rush, Weekday Volume
     r2_col1, r2_col2, r2_col3 = st.columns([1.1, 1.0, 1.0])
 
     with r2_col1:
-        st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Top-Selling Food Items</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-caption">Ranked by total quantity (units) sold.</div>', unsafe_allow_html=True)
-        item_perf = get_item_performance(df_filtered)
+        with st.container(border=True, key="panel3"):
+            st.markdown('<div class="section-header">Top-Selling Food Items</div>', unsafe_allow_html=True)
+            item_perf = get_item_performance(df_filtered)
 
-        fig_items = px.bar(
-            item_perf.sort_values(by="units_sold", ascending=True),
-            x="units_sold",
-            y="item",
-            orientation="h",
-            color="category",
-            color_discrete_map=CATEGORY_PALETTE,
-            text="units_sold",
-        )
-        fig_items.update_traces(
-            texttemplate="%{text:,}",
-            textposition="outside",
-            textfont=dict(color="#334155", size=11),
-            hovertemplate="<b>%{y}</b><br>Units Sold: %{x:,}<extra></extra>",
-        )
-        fig_items.update_layout(showlegend=False, xaxis_title="Units Sold", yaxis_title=None)
-        apply_glass_theme(fig_items, height=300)
-        st.plotly_chart(fig_items, width="stretch")
-        st.markdown('</div>', unsafe_allow_html=True)
+            fig_items = px.bar(
+                item_perf.sort_values(by="units_sold", ascending=True),
+                x="units_sold",
+                y="item",
+                orientation="h",
+                color="category",
+                color_discrete_map=CATEGORY_PALETTE,
+                text="units_sold",
+            )
+            fig_items.update_traces(
+                texttemplate="%{text:,}",
+                textposition="outside",
+                textfont=dict(color="#334155", size=11),
+                hovertemplate="<b>%{y}</b><br>Units Sold: %{x:,}<extra></extra>",
+            )
+            fig_items.update_layout(showlegend=False, xaxis_title="Units Sold", yaxis_title=None)
+            apply_glass_theme(fig_items, height=300)
+            st.plotly_chart(fig_items, width="stretch")
 
     with r2_col2:
-        st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Sales by Hour (Rush Windows)</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-caption">Demand distribution across breakfast, lunch & snacks.</div>', unsafe_allow_html=True)
-        hourly = get_hourly_sales(df_filtered)
+        with st.container(border=True, key="panel4"):
+            st.markdown('<div class="section-header">Sales by Hour (Rush Windows)</div>', unsafe_allow_html=True)
+            hourly = get_hourly_sales(df_filtered)
 
-        # Highlight meal times: Cobalt for rush windows, subtle slate for other hours
-        hour_colors = [
-            "#0071E3" if (12 <= h <= 14 or 16 <= h <= 17) else "rgba(148, 163, 184, 0.4)"
-            for h in hourly["hour"]
-        ]
-
-        fig_hour = go.Figure(
-            data=[
-                go.Bar(
-                    x=hourly["time_label"],
-                    y=hourly["quantity"],
-                    marker_color=hour_colors,
-                    hovertemplate="<b>%{x}</b><br>Units Sold: %{y:,}<extra></extra>",
-                )
+            # Highlight meal times: Cobalt for rush windows, subtle slate for other hours
+            hour_colors = [
+                "#0071E3" if (12 <= h <= 14 or 16 <= h <= 17) else "rgba(148, 163, 184, 0.4)"
+                for h in hourly["hour"]
             ]
-        )
-        fig_hour.update_layout(xaxis_title=None, yaxis_title="Units Sold")
-        apply_glass_theme(fig_hour, height=300)
-        st.plotly_chart(fig_hour, width="stretch")
-        st.markdown('</div>', unsafe_allow_html=True)
+
+            fig_hour = go.Figure(
+                data=[
+                    go.Bar(
+                        x=hourly["time_label"],
+                        y=hourly["quantity"],
+                        marker_color=hour_colors,
+                        hovertemplate="<b>%{x}</b><br>Units Sold: %{y:,}<extra></extra>",
+                    )
+                ]
+            )
+            fig_hour.update_layout(xaxis_title=None, yaxis_title="Units Sold")
+            apply_glass_theme(fig_hour, height=300)
+            st.plotly_chart(fig_hour, width="stretch")
 
     with r2_col3:
-        st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Sales by Weekday</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-caption">Weekly rhythm showing weekday rush vs weekend drop.</div>', unsafe_allow_html=True)
-        weekday_df = get_weekday_sales(df_filtered)
+        with st.container(border=True, key="panel5"):
+            st.markdown('<div class="section-header">Sales by Weekday</div>', unsafe_allow_html=True)
+            weekday_df = get_weekday_sales(df_filtered)
 
-        wk_colors = ["#0071E3" if d < 5 else "#F59E0B" for d in weekday_df["day_of_week"]]
+            wk_colors = ["#0071E3" if d < 5 else "#F59E0B" for d in weekday_df["day_of_week"]]
 
-        fig_wk = go.Figure(
-            data=[
-                go.Bar(
-                    x=[d[:3] for d in weekday_df["day_name"]],
-                    y=weekday_df["revenue"],
-                    marker_color=wk_colors,
-                    hovertemplate="<b>%{x}</b><br>Total Revenue: ₹%{y:,.0f}<br>Avg Daily: ₹%{customdata:,.0f}<extra></extra>",
-                    customdata=weekday_df["avg_daily_revenue"],
-                )
-            ]
-        )
-        fig_wk.update_layout(xaxis_title=None, yaxis_title="Revenue (₹)")
-        apply_glass_theme(fig_wk, height=300)
-        st.plotly_chart(fig_wk, width="stretch")
-        st.markdown('</div>', unsafe_allow_html=True)
+            fig_wk = go.Figure(
+                data=[
+                    go.Bar(
+                        x=[d[:3] for d in weekday_df["day_name"]],
+                        y=weekday_df["revenue"],
+                        marker_color=wk_colors,
+                        hovertemplate="<b>%{x}</b><br>Total Revenue: ₹%{y:,.0f}<br>Avg Daily: ₹%{customdata:,.0f}<extra></extra>",
+                        customdata=weekday_df["avg_daily_revenue"],
+                    )
+                ]
+            )
+            fig_wk.update_layout(xaxis_title=None, yaxis_title="Revenue (₹)")
+            apply_glass_theme(fig_wk, height=300)
+            st.plotly_chart(fig_wk, width="stretch")
 
 
 # =============================================================
@@ -967,7 +844,6 @@ with tab_products:
             <div class="liquid-card liquid-purple">
                 <div class="kpi-title">Dominant Payment Mode</div>
                 <div class="kpi-metric" style="font-size:1.6rem;">{summary['top_payment_method']}</div>
-                <div class="kpi-foot purple">Campus cashless trend</div>
             </div>
         </div>
         """,
@@ -977,94 +853,88 @@ with tab_products:
     p_col1, p_col2 = st.columns([1.3, 1.0])
 
     with p_col1:
-        st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Units Sold vs. Gross Revenue</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-caption">Dual-axis comparison of volume velocity against financial earnings.</div>', unsafe_allow_html=True)
-        item_table = get_item_performance(df_filtered)
+        with st.container(border=True, key="panel6"):
+            st.markdown('<div class="section-header">Units Sold vs. Gross Revenue</div>', unsafe_allow_html=True)
+            item_table = get_item_performance(df_filtered)
 
-        fig_compare = go.Figure()
-        fig_compare.add_trace(
-            go.Bar(
-                name="Units Sold",
-                x=item_table["item"],
-                y=item_table["units_sold"],
-                marker_color="#0071E3",
-                yaxis="y",
-                offsetgroup=1,
+            fig_compare = go.Figure()
+            fig_compare.add_trace(
+                go.Bar(
+                    name="Units Sold",
+                    x=item_table["item"],
+                    y=item_table["units_sold"],
+                    marker_color="#0071E3",
+                    yaxis="y",
+                    offsetgroup=1,
+                )
             )
-        )
-        fig_compare.add_trace(
-            go.Bar(
-                name="Revenue (₹)",
-                x=item_table["item"],
-                y=item_table["revenue"],
-                marker_color="#F59E0B",
-                yaxis="y2",
-                offsetgroup=2,
+            fig_compare.add_trace(
+                go.Bar(
+                    name="Revenue (₹)",
+                    x=item_table["item"],
+                    y=item_table["revenue"],
+                    marker_color="#F59E0B",
+                    yaxis="y2",
+                    offsetgroup=2,
+                )
             )
-        )
-        fig_compare.update_layout(
-            xaxis=dict(title=None, tickangle=-20),
-            yaxis=dict(title="Units Sold", showgrid=False),
-            yaxis2=dict(
-                title="Revenue (₹)",
-                overlaying="y",
-                side="right",
-                showgrid=True,
-                gridcolor="rgba(226, 232, 240, 0.65)",
-            ),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        )
-        apply_glass_theme(fig_compare, height=330)
-        st.plotly_chart(fig_compare, width="stretch")
-        st.markdown('</div>', unsafe_allow_html=True)
+            fig_compare.update_layout(
+                xaxis=dict(title=None, tickangle=-20),
+                yaxis=dict(title="Units Sold", showgrid=False),
+                yaxis2=dict(
+                    title="Revenue (₹)",
+                    overlaying="y",
+                    side="right",
+                    showgrid=True,
+                    gridcolor="rgba(226, 232, 240, 0.65)",
+                ),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            )
+            apply_glass_theme(fig_compare, height=330)
+            st.plotly_chart(fig_compare, width="stretch")
 
     with p_col2:
-        st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Department Performance Summary</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-caption">Department-level totals and contributions.</div>', unsafe_allow_html=True)
-        cat_df = get_category_performance(df_filtered)
+        with st.container(border=True, key="panel7"):
+            st.markdown('<div class="section-header">Department Performance Summary</div>', unsafe_allow_html=True)
+            cat_df = get_category_performance(df_filtered)
         
-        display_cats = cat_df.copy()
-        display_cats["revenue"] = display_cats["revenue"].apply(lambda v: f"₹{v:,.2f}")
-        display_cats["units_sold"] = display_cats["units_sold"].apply(lambda v: f"{v:,}")
-        display_cats["revenue_share_pct"] = display_cats["revenue_share_pct"].apply(lambda v: f"{v:.1f}%")
-        display_cats.columns = ["Department", "Units Sold", "Total Revenue", "Orders", "Revenue Share"]
+            display_cats = cat_df.copy()
+            display_cats["revenue"] = display_cats["revenue"].apply(lambda v: f"₹{v:,.2f}")
+            display_cats["units_sold"] = display_cats["units_sold"].apply(lambda v: f"{v:,}")
+            display_cats["revenue_share_pct"] = display_cats["revenue_share_pct"].apply(lambda v: f"{v:.1f}%")
+            display_cats.columns = ["Department", "Units Sold", "Total Revenue", "Orders", "Revenue Share"]
+            st.dataframe(
+                display_cats[["Department", "Units Sold", "Total Revenue", "Revenue Share"]],
+                width="stretch",
+                hide_index=True,
+            )
+
+            st.markdown('<div class="section-label">Payment Channel Breakdown</div>', unsafe_allow_html=True)
+            pay_dist = df_filtered["payment_method"].value_counts(normalize=True).reset_index()
+            pay_dist.columns = ["Payment Channel", "Usage Share"]
+            pay_dist["Usage Share"] = (pay_dist["Usage Share"] * 100).round(1).astype(str) + "%"
+            st.dataframe(pay_dist, width="stretch", hide_index=True)
+
+    # Master Item Matrix
+    with st.container(border=True, key="panel8"):
+        st.markdown('<div class="section-header">Item Master Performance Matrix</div>', unsafe_allow_html=True)
+        display_item_table = item_table.copy()
+        display_item_table["unit_price"] = display_item_table["unit_price"].apply(lambda p: f"₹{p:.0f}")
+        display_item_table["units_sold"] = display_item_table["units_sold"].apply(lambda u: f"{u:,}")
+        display_item_table["revenue"] = display_item_table["revenue"].apply(lambda r: f"₹{r:,.2f}")
+        display_item_table["revenue_share_pct"] = display_item_table["revenue_share_pct"].apply(lambda s: f"{s:.1f}%")
+        display_item_table.columns = [
+            "Food Item", "Category", "Unit Price", "Total Units Sold",
+            "Total Revenue", "Orders", "Revenue Share", "Avg Daily Units"
+        ]
         st.dataframe(
-            display_cats[["Department", "Units Sold", "Total Revenue", "Revenue Share"]],
+            display_item_table[[
+                "Food Item", "Category", "Unit Price", "Total Units Sold",
+                "Avg Daily Units", "Total Revenue", "Revenue Share"
+            ]],
             width="stretch",
             hide_index=True,
         )
-
-        st.markdown('<div class="section-caption" style="margin-top:14px;margin-bottom:6px;">Payment Channel Breakdown</div>', unsafe_allow_html=True)
-        pay_dist = df_filtered["payment_method"].value_counts(normalize=True).reset_index()
-        pay_dist.columns = ["Payment Channel", "Usage Share"]
-        pay_dist["Usage Share"] = (pay_dist["Usage Share"] * 100).round(1).astype(str) + "%"
-        st.dataframe(pay_dist, width="stretch", hide_index=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    # Master Item Matrix
-    st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-    st.markdown('<div class="section-header">Item Master Performance Matrix</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-caption">Complete metrics per menu offering with unit pricing and average daily volume.</div>', unsafe_allow_html=True)
-    display_item_table = item_table.copy()
-    display_item_table["unit_price"] = display_item_table["unit_price"].apply(lambda p: f"₹{p:.0f}")
-    display_item_table["units_sold"] = display_item_table["units_sold"].apply(lambda u: f"{u:,}")
-    display_item_table["revenue"] = display_item_table["revenue"].apply(lambda r: f"₹{r:,.2f}")
-    display_item_table["revenue_share_pct"] = display_item_table["revenue_share_pct"].apply(lambda s: f"{s:.1f}%")
-    display_item_table.columns = [
-        "Food Item", "Category", "Unit Price", "Total Units Sold",
-        "Total Revenue", "Orders", "Revenue Share", "Avg Daily Units"
-    ]
-    st.dataframe(
-        display_item_table[[
-            "Food Item", "Category", "Unit Price", "Total Units Sold",
-            "Avg Daily Units", "Total Revenue", "Revenue Share"
-        ]],
-        width="stretch",
-        hide_index=True,
-    )
-    st.markdown('</div>', unsafe_allow_html=True)
 
 
 # =============================================================
@@ -1072,7 +942,6 @@ with tab_products:
 # =============================================================
 with tab_forecast:
     st.markdown('<div class="section-header">Supervised Demand Forecasting (Upcoming 7 Days)</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-caption">Scikit-learn RandomForestRegressor pipeline trained with OneHotEncoding and zero-sales imputation.</div>', unsafe_allow_html=True)
 
     sel_col1, sel_col2 = st.columns([1.5, 2.5])
     with sel_col1:
@@ -1115,12 +984,10 @@ with tab_forecast:
             <div class="liquid-card liquid-amber">
                 <div class="kpi-title">7-Day Target Units</div>
                 <div class="kpi-metric">{forecast_sum['total_units']}</div>
-                <div class="kpi-foot amber">Total portions to cook</div>
             </div>
             <div class="liquid-card liquid-mint">
                 <div class="kpi-title">Expected Cash Flow</div>
                 <div class="kpi-metric">{format_inr(forecast_sum['total_revenue'])}</div>
-                <div class="kpi-foot emerald">Gross sales projection</div>
             </div>
             <div class="liquid-card liquid-sky">
                 <div class="kpi-title">Peak Rush Day</div>
@@ -1140,56 +1007,52 @@ with tab_forecast:
     fc_col1, fc_col2 = st.columns([1.4, 1.0])
 
     with fc_col1:
-        st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Upcoming 7-Day Forecast Horizon</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="section-caption">Predicted daily portion requirements from {forecast_df["Date"].iloc[0]} to {forecast_df["Date"].iloc[-1]}.</div>', unsafe_allow_html=True)
+        with st.container(border=True, key="panel9"):
+            st.markdown('<div class="section-header">Upcoming 7-Day Forecast Horizon</div>', unsafe_allow_html=True)
 
-        fc_colors = ["#F59E0B" if row["Is Weekend"] == "Yes" else "#0071E3" for _, row in forecast_df.iterrows()]
+            fc_colors = ["#F59E0B" if row["Is Weekend"] == "Yes" else "#0071E3" for _, row in forecast_df.iterrows()]
 
-        fig_fc = go.Figure(
-            data=[
-                go.Bar(
-                    x=[f"{row['Day']}<br><span style='font-size:10px;color:#64748B;'>{row['Date'][5:]}</span>" for _, row in forecast_df.iterrows()],
-                    y=forecast_df["Predicted Units"],
-                    text=forecast_df["Predicted Units"],
-                    textposition="outside",
-                    marker_color=fc_colors,
-                    textfont=dict(color="#0F172A", size=12),
-                    hovertemplate="<b>%{x}</b><br>Forecast: %{y} units<br>Expected Revenue: ₹%{customdata:,.0f}<extra></extra>",
-                    customdata=forecast_df["Expected Revenue (₹)"],
-                )
-            ]
-        )
-        fig_fc.update_layout(
-            yaxis=dict(
-                title="Units to Prepare",
-                range=[0, max(forecast_df["Predicted Units"]) * 1.25],
+            fig_fc = go.Figure(
+                data=[
+                    go.Bar(
+                        x=[f"{row['Day']}<br><span style='font-size:10px;color:#64748B;'>{row['Date'][5:]}</span>" for _, row in forecast_df.iterrows()],
+                        y=forecast_df["Predicted Units"],
+                        text=forecast_df["Predicted Units"],
+                        textposition="outside",
+                        marker_color=fc_colors,
+                        textfont=dict(color="#0F172A", size=12),
+                        hovertemplate="<b>%{x}</b><br>Forecast: %{y} units<br>Expected Revenue: ₹%{customdata:,.0f}<extra></extra>",
+                        customdata=forecast_df["Expected Revenue (₹)"],
+                    )
+                ]
             )
-        )
-        apply_glass_theme(fig_fc, height=310)
-        st.plotly_chart(fig_fc, width="stretch")
-        st.markdown(
-            '<div style="font-size:0.78rem;color:#64748B;margin-top:4px;">'
-            '<span style="color:#0071E3;">●</span> Weekday Campus Rush &nbsp;|&nbsp; '
-            '<span style="color:#F59E0B;">●</span> Weekend Campus Lull'
-            '</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown('</div>', unsafe_allow_html=True)
+            fig_fc.update_layout(
+                yaxis=dict(
+                    title="Units to Prepare",
+                    range=[0, max(forecast_df["Predicted Units"]) * 1.25],
+                )
+            )
+            apply_glass_theme(fig_fc, height=310)
+            st.plotly_chart(fig_fc, width="stretch")
+            st.markdown(
+                '<div style="font-size:0.78rem;color:#64748B;margin-top:8px;padding-bottom:2px;">'
+                '<span style="color:#0071E3;">●</span> Weekday Campus Rush &nbsp;|&nbsp; '
+                '<span style="color:#F59E0B;">●</span> Weekend Campus Lull'
+                '</div>',
+                unsafe_allow_html=True,
+            )
 
     with fc_col2:
-        st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Kitchen Production Schedule</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-caption">Batch prep quotas and cash projections.</div>', unsafe_allow_html=True)
+        with st.container(border=True, key="panel10"):
+            st.markdown('<div class="section-header">Kitchen Production Schedule</div>', unsafe_allow_html=True)
 
-        disp_fc = forecast_df.copy()
-        disp_fc["Expected Revenue (₹)"] = disp_fc["Expected Revenue (₹)"].apply(lambda v: f"₹{v:,.2f}")
-        st.dataframe(
-            disp_fc[["Date", "Day", "Is Weekend", "Predicted Units", "Expected Revenue (₹)"]],
-            width="stretch",
-            hide_index=True,
-        )
-        st.markdown('</div>', unsafe_allow_html=True)
+            disp_fc = forecast_df.copy()
+            disp_fc["Expected Revenue (₹)"] = disp_fc["Expected Revenue (₹)"].apply(lambda v: f"₹{v:,.2f}")
+            st.dataframe(
+                disp_fc[["Date", "Day", "Is Weekend", "Predicted Units", "Expected Revenue (₹)"]],
+                width="stretch",
+                hide_index=True,
+            )
 
     # ML Explainability Expander
     with st.expander("Machine Learning Workflow & Verification Architecture", expanded=False):
@@ -1208,7 +1071,6 @@ with tab_forecast:
 # =============================================================
 with tab_meta:
     st.markdown('<div class="section-header">Dataset Specification & System Transparency</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-caption">Detailed documentation of the 180-day canteen transactions dataset and model parameters.</div>', unsafe_allow_html=True)
 
     # 4 Dataset Metrics with Liquid Glass Tints
     st.markdown(
@@ -1217,17 +1079,14 @@ with tab_meta:
             <div class="liquid-card liquid-amber">
                 <div class="kpi-title">Total Orders Logged</div>
                 <div class="kpi-metric">{len(df_raw):,}</div>
-                <div class="kpi-foot amber">Individual customer transactions</div>
             </div>
             <div class="liquid-card liquid-neutral">
                 <div class="kpi-title">Historical Date Span</div>
                 <div class="kpi-metric">{df_raw['date'].nunique()} Days</div>
-                <div class="kpi-foot slate">Continuous university calendar</div>
             </div>
             <div class="liquid-card liquid-mint">
                 <div class="kpi-title">Missing Values</div>
                 <div class="kpi-metric">{df_raw.isna().sum().sum()} nulls</div>
-                <div class="kpi-foot emerald">100% clean schema validation</div>
             </div>
             <div class="liquid-card liquid-purple">
                 <div class="kpi-title">Daily Demand Grid</div>
@@ -1239,56 +1098,50 @@ with tab_meta:
         unsafe_allow_html=True,
     )
 
-    st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-    st.markdown('<div class="section-header">Historical Sales Records Preview</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-caption">Recent order transactions from data/canteen_sales.csv:</div>', unsafe_allow_html=True)
-    st.dataframe(
-        df_raw.head(25).assign(
-            unit_price=df_raw.head(25)["unit_price"].apply(lambda p: f"₹{p:.0f}"),
-            revenue=df_raw.head(25)["revenue"].apply(lambda r: f"₹{r:,.2f}"),
-        ),
-        width="stretch",
-        hide_index=True,
-    )
+    with st.container(border=True, key="panel11"):
+        st.markdown('<div class="section-header">Historical Sales Records Preview</div>', unsafe_allow_html=True)
+        st.dataframe(
+            df_raw.head(25).assign(
+                unit_price=df_raw.head(25)["unit_price"].apply(lambda p: f"₹{p:.0f}"),
+                revenue=df_raw.head(25)["revenue"].apply(lambda r: f"₹{r:,.2f}"),
+            ),
+            width="stretch",
+            hide_index=True,
+        )
 
-    csv_data = df_raw.to_csv(index=False).encode("utf-8")
-    st.download_button(
-        label="Download Historical Canteen Dataset (CSV)",
-        data=csv_data,
-        file_name="canteen_sales.csv",
-        mime="text/csv",
-        help="Download the complete 180-day canteen dataset for external validation.",
-    )
-    st.markdown('</div>', unsafe_allow_html=True)
+        csv_data = df_raw.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            label="Download Historical Canteen Dataset (CSV)",
+            data=csv_data,
+            file_name="canteen_sales.csv",
+            mime="text/csv",
+            help="Download the complete 180-day canteen dataset for external validation.",
+        )
 
     m_col1, m_col2 = st.columns(2)
 
     with m_col1:
-        st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Feature Engineering & Encoding</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-caption">Feature matrix configuration inside scikit-learn Pipeline.</div>', unsafe_allow_html=True)
-        feat_specs = [
-            {"Feature": "item", "Type": "Categorical", "Encoding": "OneHotEncoder", "Domain": "7 canteen food items"},
-            {"Feature": "category", "Type": "Categorical", "Encoding": "OneHotEncoder", "Domain": "Meals, Breakfast, Snacks, Beverages"},
-            {"Feature": "day_name", "Type": "Categorical", "Encoding": "OneHotEncoder", "Domain": "Monday to Sunday"},
-            {"Feature": "unit_price", "Type": "Numerical", "Encoding": "Passthrough", "Domain": "₹25 to ₹120"},
-            {"Feature": "is_weekend", "Type": "Binary (0/1)", "Encoding": "Passthrough", "Domain": "Weekend vs Weekday indicator"},
-            {"Feature": "month", "Type": "Numerical", "Encoding": "Passthrough", "Domain": "Month index (1 - 12)"},
-            {"Feature": "day_of_week", "Type": "Numerical", "Encoding": "Passthrough", "Domain": "Day index (0 - 6)"},
-        ]
-        st.dataframe(pd.DataFrame(feat_specs), width="stretch", hide_index=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True, key="panel12"):
+            st.markdown('<div class="section-header">Feature Engineering & Encoding</div>', unsafe_allow_html=True)
+            feat_specs = [
+                {"Feature": "item", "Type": "Categorical", "Encoding": "OneHotEncoder", "Domain": "7 canteen food items"},
+                {"Feature": "category", "Type": "Categorical", "Encoding": "OneHotEncoder", "Domain": "Meals, Breakfast, Snacks, Beverages"},
+                {"Feature": "day_name", "Type": "Categorical", "Encoding": "OneHotEncoder", "Domain": "Monday to Sunday"},
+                {"Feature": "unit_price", "Type": "Numerical", "Encoding": "Passthrough", "Domain": "₹25 to ₹120"},
+                {"Feature": "is_weekend", "Type": "Binary (0/1)", "Encoding": "Passthrough", "Domain": "Weekend vs Weekday indicator"},
+                {"Feature": "month", "Type": "Numerical", "Encoding": "Passthrough", "Domain": "Month index (1 - 12)"},
+                {"Feature": "day_of_week", "Type": "Numerical", "Encoding": "Passthrough", "Domain": "Day index (0 - 6)"},
+            ]
+            st.dataframe(pd.DataFrame(feat_specs), width="stretch", hide_index=True)
 
     with m_col2:
-        st.markdown('<div class="chart-glass-panel">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">Top Predictive Demand Signals</div>', unsafe_allow_html=True)
-        st.markdown('<div class="section-caption">Random Forest Gini feature importances.</div>', unsafe_allow_html=True)
-        if ml_metrics["top_features"]:
-            f_imp = pd.DataFrame(ml_metrics["top_features"])
-            f_imp["importance"] = (f_imp["importance"] * 100).round(1).astype(str) + "%"
-            f_imp.columns = ["Feature Node", "Importance"]
-            st.dataframe(f_imp, width="stretch", hide_index=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True, key="panel13"):
+            st.markdown('<div class="section-header">Top Predictive Demand Signals</div>', unsafe_allow_html=True)
+            if ml_metrics["top_features"]:
+                f_imp = pd.DataFrame(ml_metrics["top_features"])
+                f_imp["importance"] = (f_imp["importance"] * 100).round(1).astype(str) + "%"
+                f_imp.columns = ["Feature Node", "Importance"]
+                st.dataframe(f_imp, width="stretch", hide_index=True)
 
 # Footer
 st.markdown(
